@@ -116,6 +116,72 @@ sudo chmod -R 755 /path/to/mintron
 
 ---
 
+### To-Do-Liste für geplante Funktionen und zukünftige Integrationen
+
+Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen für das Mintron-Dashboard:
+
+---
+
+#### **1. Docker-Dashboard**
+**Funktionen:**
+- Container bearbeiten, starten, stoppen, löschen
+- Neue Container hinzufügen
+- Details anzeigen (z. B. Status, Name, ID)
+- Log-Ansicht der Container
+- Integration von Docker-Statistiken (Ressourcenverbrauch)
+
+---
+
+#### **2. Repository-Management (repo.php)**
+**Funktionen:**
+- Repositories anzeigen, bearbeiten und löschen
+- Neues Repository hinzufügen
+- Prüfung der Repository-Verfügbarkeit
+- Automatische Aktualisierungsliste (`apt update`)
+- Validierung von `sources.list`-Einträgen
+
+---
+
+#### **3. Netzwerkschnittstellen**
+**Änderungen:**
+- Überflüssige Buttons oder redundante Aktionen entfernen
+- Details zu aktiven Schnittstellen anzeigen (z. B. IP-Adresse, MAC-Adresse, Status)
+- Möglichkeit, Schnittstellen zu aktivieren oder deaktivieren
+
+---
+
+#### **4. Grafikkarten-Status und Informationen**
+**Geplante Funktionen:**
+- Anzeige der Grafikkarten-Treiber-Version
+- Speichernutzung der GPU
+- Temperaturüberwachung
+- Unterstützung für NVIDIA/AMD/Intel GPUs (mit Tools wie `nvidia-smi` oder `rocm-smi`)
+
+---
+
+#### **5. Cron-Management (cron.php)**
+**Funktionen:**
+- Cron-Jobs anzeigen, hinzufügen, bearbeiten und löschen
+- Details zu jedem Job (z. B. nächster Ausführungszeitpunkt, Kommando)
+- Fehlerprüfung für Cron-Ausdrücke
+- Log-Ansicht der letzten Cron-Ausführungen
+
+---
+
+#### **Zukünftige Integration (geplant):**
+
+##### **Dateimanager**
+- Anzeigen, Hochladen und Bearbeiten von Dateien direkt im Dashboard
+- Rechte-Management (Lesen, Schreiben, Ausführen)
+- Unterstützung für gängige Dateiformate
+
+##### **Terminal**
+- Ein eingebettetes Terminal für direkte Befehlsausführung
+- Authentifizierung für sensible Operationen
+- Unterstützung für Syntax-Highlighting
+
+---
+
 ## 📖 **Hilfen**
 
 <details>
