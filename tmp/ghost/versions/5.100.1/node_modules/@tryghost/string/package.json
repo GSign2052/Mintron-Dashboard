@@ -1,0 +1,32 @@
+{
+  "name": "@tryghost/string",
+  "version": "0.2.12",
+  "repository": "https://github.com/TryGhost/SDK/tree/main/packages/string",
+  "author": "Ghost Foundation",
+  "license": "MIT",
+  "main": "lib",
+  "scripts": {
+    "dev": "echo \"Implement me!\"",
+    "test": "NODE_ENV=testing c8 --all --reporter text --reporter cobertura mocha './test/**/*.test.js'",
+    "lint": "eslint . --ext .js --cache",
+    "posttest": "yarn lint"
+  },
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "c8": "9.1.0",
+    "jsdom": "24.0.0",
+    "mocha": "10.4.0",
+    "should": "13.2.3",
+    "sinon": "17.0.1"
+  },
+  "dependencies": {
+    "unidecode": "^0.1.8"
+  },
+  "gitHead": "048ccde4bd78d2dcd60e778d03eb8dc3227cece5"
+}

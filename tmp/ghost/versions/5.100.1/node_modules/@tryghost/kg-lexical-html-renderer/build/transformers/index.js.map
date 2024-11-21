@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../lib/transformers/index.ts"],"names":[],"mappings":";;AAQA,MAAM,mBAAmB,GAAyB;IAC9C,OAAO,CAAC,qBAAqB,CAAC;IAC9B,OAAO,CAAC,mBAAmB,CAAC;IAC5B,OAAO,CAAC,gBAAgB,CAAC;IACzB,OAAO,CAAC,sBAAsB,CAAC;IAC/B,OAAO,CAAC,iBAAiB,CAAC;CAC7B,CAAC;AAEF,kBAAe,mBAAmB,CAAC"}
