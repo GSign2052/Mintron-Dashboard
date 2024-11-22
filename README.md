@@ -10,8 +10,6 @@
 
 [🚀 Installation](#installation) • [⚙️ Konfiguration](#konfiguration) • [📚 Dokumentation](#dokumentation) • [🔧 Features](#features)
 
-Hier ist die **Verzeichnisstruktur** für deine GitHub-README, ordentlich formatiert:
-
 ---
  </div>
  
