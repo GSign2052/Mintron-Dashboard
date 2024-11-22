@@ -10,6 +10,61 @@
 
 [🚀 Installation](#installation) • [⚙️ Konfiguration](#konfiguration) • [📚 Dokumentation](#dokumentation) • [🔧 Features](#features)
 
+Hier ist die **Verzeichnisstruktur** für deine GitHub-README, ordentlich formatiert:
+
+---
+ </div>
+ 
+## 📂 **Verzeichnisstruktur**
+
+```plaintext
+├── index.php                   # Einstiegspunkt der Anwendung
+├── src/                        # Quellcode-Ordner
+│   ├── nav.php                 # Navigationselemente
+│   ├── header.php              # Kopfbereich (Header) der Seiten
+│   ├── script.js               # JavaScript für dynamische Funktionen
+│   └── style.css               # CSS für das Design
+├── dashboard/                  # Dashboard-Module
+│   ├── network.php             # Netzwerkübersicht
+│   ├── docker.php              # Docker-Status und Verwaltung
+│   ├── repo.php                # Aktuelle Repository-Listen
+│   └── system_info.php         # Systeminformationen:
+│       ├── Systemzeit          # Aktuelle Systemzeit
+│       ├── CPU                 # CPU-Daten (Auslastung, Temperatur, Treiber, Modell)
+│       ├── Arbeitsspeicher     # RAM-Daten (Auslastung, Speichergröße, Treiber, Modell)
+│       ├── Festplatte          # HDD/SSD-Daten (Auslastung, Speichergröße, Treiber, Modell)
+│       ├── Betriebssystem      # OS-Details (Treiber, Modell)
+│       └── Prozesse            # Übersicht über laufende Prozesse
+```
+<details>
+<summary>Erklärung der Module:</summary>
+
+- **`index.php`**: Der Einstiegspunkt für die Anwendung, wird beim Aufruf der Seite geladen.
+- **`src/`**: Enthält alle grundlegenden Skripte und Styles:
+  - **`nav.php`**: Die Navigationsleiste der Anwendung.
+  - **`header.php`**: Kopfbereich (Header) der Seiten.
+  - **`script.js`**: JavaScript für dynamische Funktionen im Dashboard.
+  - **`style.css`**: Stylesheets für das Design und Layout des Dashboards.
+  
+- **`dashboard/`**: Die verschiedenen Module für das Dashboard:
+  - **`network.php`**: Zeigt die Netzwerkübersicht und Schnittstellen an.
+  - **`docker.php`**: Verwaltung und Übersicht über Docker-Container.
+  - **`repo.php`**: Anzeige der aktuellen Repositories und deren Status.
+  - **`system_info.php`**: Verschiedene Systeminformationen:
+    - **`Systemzeit`**: Anzeige der aktuellen Systemzeit.
+    - **`CPU`**: Zeigt Auslastung, Temperatur, Treiber und Modellinformationen der CPU.
+    - **`Arbeitsspeicher`**: Informationen zu RAM (Auslastung, Speichergröße, Treiber, Modell).
+    - **`Festplatte`**: Informationen zu HDD/SSD (Speicher, Auslastung, Treiber, Modell).
+    - **`Betriebssystem`**: Details zum Betriebssystem (Treiber, Modell).
+    - **`Prozesse`**: Übersicht über alle laufenden Prozesse.
+
+</details>
+
+<div align="center">
+
+
+---
+
 ![Bildbeschreibung](https://github.com/GSign2052/Mintron-Dashboard/raw/main/mintron.png)
 
 </div>
