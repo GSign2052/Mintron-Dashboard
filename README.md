@@ -10,7 +10,7 @@
 
 [🚀 Installation](#installation) • [⚙️ Konfiguration](#konfiguration) • [📚 Dokumentation](#dokumentation) • [🔧 Features](#features)
 
-![Dashboard Preview](path_to_preview_image.png)
+![Bildbeschreibung](https://github.com/GSign2052/Mintron-Dashboard/raw/main/mintron.png)
 
 </div>
 
