@@ -15,7 +15,6 @@
                 <p>CPU-Temperatur: <span id="cpu_temp"></span> °C</p>
                 <p>CPU-Modell: <span id="cpu_model"></span></p>
                 <p>RAM-Nutzung: <span id="ram"></span> MB</p>
-                <p>RAM-Modell: <span id="ram_model"></span></p>
                 <p>Festplatte: <span id="disk"></span> GB frei</p>
                 <p>System OS: <span id="os"></span></p>
                 <p>Prozesse: <span id="processes"></span></p>
@@ -28,6 +27,9 @@
             </div>
             <div id="docker" class="view" style="display:none;">
                 <?php include 'dashboard/docker.php'; ?>
+            </div>
+            <div id="updates" class="view" style="display:none;">
+                <?php include 'dashboard/updates.php'; ?> <!-- Neuer Abschnitt für Updates -->
             </div>
         </div>
     </div>

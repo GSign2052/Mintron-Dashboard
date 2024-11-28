@@ -26,9 +26,6 @@ $mem = array_merge($mem);
 $ram_total = $mem[1];
 $ram_used = $mem[2];
 
-// RAM-Modell
-$ram_model = shell_exec('dmidecode -t memory | grep "Part Number:" | awk \'{print $3}\'');
-
 // Speicherplatz
 $disk_free = disk_free_space("/");
 $disk_total = disk_total_space("/");
@@ -58,7 +55,6 @@ $data = [
         'total' => $ram_total,
         'used' => $ram_used
     ],
-    'ram_model' => trim($ram_model),
     'disk' => [
         'free' => $disk_free,
         'total' => $disk_total

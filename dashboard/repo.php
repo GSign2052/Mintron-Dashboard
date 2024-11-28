@@ -1,4 +1,5 @@
 <h2>Repositorys</h2>
+<button onclick="addRepo()">Hinzufügen</button>
 <table>
     <thead>
         <tr>
@@ -10,4 +11,3 @@
         <!-- Dynamischer Inhalt -->
     </tbody>
 </table>
-<button onclick="addRepo()">Hinzufügen</button>

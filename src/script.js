@@ -7,7 +7,6 @@ function fetchData() {
             document.getElementById('cpu_temp').textContent = data.cpu_temp;
             document.getElementById('cpu_model').textContent = data.cpu_model;
             document.getElementById('ram').textContent = `${data.ram.used} / ${data.ram.total}`;
-            document.getElementById('ram_model').textContent = data.ram_model;
             document.getElementById('disk').textContent = (data.disk.free / (1024 * 1024 * 1024)).toFixed(2);
             document.getElementById('os').textContent = data.os;
             document.getElementById('processes').textContent = data.processes;
@@ -20,11 +19,6 @@ function fetchData() {
                     return `<tr>
                         <td>${iface}</td>
                         <td>${ip}</td>
-                        <td>Aktiv</td>
-                        <td class="actions">
-                            <button onclick="editNetwork('${iface}')">Bearbeiten</button>
-                            <button onclick="deleteNetwork('${iface}')">Löschen</button>
-                        </td>
                     </tr>`;
                 }).join('');
             }
@@ -36,7 +30,6 @@ function fetchData() {
                     <tr>
                         <td>${repo}</td>
                         <td class="actions">
-                            <button onclick="editRepo('${repo}')">Bearbeiten</button>
                             <button onclick="deleteRepo('${repo}')">Löschen</button>
                         </td>
                     </tr>
@@ -44,22 +37,45 @@ function fetchData() {
             }
 
             // Docker-Container laden
-            const dockerTable = document.getElementById('docker-table');
-            if (dockerTable) {
-                dockerTable.innerHTML = data.docker.split('\n').map(container => {
-                    const [id, name, status] = container.split('|');
-                    return `<tr>
-                        <td>${id}</td>
-                        <td>${name}</td>
-                        <td>${status}</td>
-                        <td class="actions">
-                            <button onclick="startDocker('${id}')">Starten</button>
-                            <button onclick="stopDocker('${id}')">Stoppen</button>
-                            <button onclick="deleteDocker('${id}')">Löschen</button>
-                        </td>
-                    </tr>`;
-                }).join('');
-            }
+            fetch('dashboard/docker_control.php')
+                .then(response => response.json())
+                .then(dockerData => {
+                    // Docker-Status anzeigen
+                    const dockerStatus = document.getElementById('docker-status');
+                    if (dockerStatus) {
+                        dockerStatus.innerHTML = dockerData.docker_status === 'running'
+                            ? '<span style="color: green;">Docker läuft</span>'
+                            : '<span style="color: red;">Docker gestoppt</span>';
+                    }
+
+                    // Docker-Fehlerprotokolle anzeigen
+                    const dockerLogs = document.getElementById('docker-logs');
+                    if (dockerLogs) {
+                        dockerLogs.textContent = dockerData.docker_logs;
+                    }
+
+                    // Docker-Container anzeigen
+                    const dockerTable = document.getElementById('docker-table');
+                    if (dockerTable) {
+                        if (dockerData.docker.length === 0 || dockerData.docker[0] === '') {
+                            dockerTable.innerHTML = '<tr><td colspan="4">Es gibt keine Container</td></tr>';
+                        } else {
+                            dockerTable.innerHTML = dockerData.docker.map(container => {
+                                const [id, name, status] = container.split('|');
+                                return `<tr>
+                                    <td>${id}</td>
+                                    <td>${name}</td>
+                                    <td>${status}</td>
+                                    <td class="actions">
+                                        <button onclick="startDocker('${id}')">Starten</button>
+                                        <button onclick="stopDocker('${id}')">Stoppen</button>
+                                        <button onclick="deleteDocker('${id}')">Löschen</button>
+                                    </td>
+                                </tr>`;
+                            }).join('');
+                        }
+                    }
+                });
         });
 }
 
@@ -68,53 +84,79 @@ function showView(view) {
     document.getElementById(view).style.display = 'block';
 }
 
-function addNetwork() {
-    alert("Neue Netzwerkschnittstelle hinzufügen!");
-}
-
-function editNetwork(iface) {
-    alert(`Netzwerkschnittstelle ${iface} bearbeiten!`);
-}
-
-function deleteNetwork(iface) {
-    if (confirm(`Bist du sicher, dass du die Netzwerkschnittstelle ${iface} löschen möchtest?`)) {
-        alert(`Netzwerkschnittstelle ${iface} gelöscht!`);
-    }
-}
-
 function addRepo() {
-    alert("Neues Repository hinzufügen!");
-}
-
-function editRepo(repo) {
-    const newRepo = prompt(`Bearbeite das Repository:`, repo);
-    if (newRepo !== null) {
-        alert(`Repository geändert zu: ${newRepo}`);
+    const newRepo = prompt("Gib das neue Repository ein:");
+    if (newRepo) {
+        alert(`Repository ${newRepo} hinzugefügt!`);
+        fetchData();
     }
 }
 
 function deleteRepo(repo) {
     if (confirm(`Bist du sicher, dass du das Repository ${repo} löschen möchtest?`)) {
         alert(`Repository ${repo} gelöscht!`);
+        fetchData();
     }
 }
 
 function addDocker() {
-    alert("Neuen Docker-Container hinzufügen!");
+    const name = prompt("Gib den Namen des neuen Docker-Containers ein:");
+    const image = prompt("Gib das Docker-Image für den neuen Container ein:");
+    if (name && image) {
+        fetch(`dashboard/docker_control.php?action=create&name=${name}&image=${image}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Docker-Container ${name} erstellt!`);
+                    fetchData();
+                } else {
+                    alert(`Fehler beim Erstellen des Docker-Containers: ${data.error}`);
+                }
+            });
+    }
 }
 
 function startDocker(id) {
-    alert(`Docker-Container ${id} starten!`);
+    fetch(`dashboard/docker_control.php?action=start&id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Docker-Container ${id} gestartet!`);
+                fetchData();
+            } else {
+                alert(`Fehler beim Starten des Docker-Containers ${id}: ${data.error}`);
+            }
+        });
 }
 
 function stopDocker(id) {
-    alert(`Docker-Container ${id} stoppen!`);
+    fetch(`dashboard/docker_control.php?action=stop&id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Docker-Container ${id} gestoppt!`);
+                fetchData();
+            } else {
+                alert(`Fehler beim Stoppen des Docker-Containers ${id}: ${data.error}`);
+            }
+        });
 }
 
 function deleteDocker(id) {
     if (confirm(`Bist du sicher, dass du den Docker-Container ${id} löschen möchtest?`)) {
-        alert(`Docker-Container ${id} gelöscht!`);
+        fetch(`dashboard/docker_control.php?action=delete&id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Docker-Container ${id} gelöscht!`);
+                    fetchData();
+                } else {
+                    alert(`Fehler beim Löschen des Docker-Containers ${id}: ${data.error}`);
+                }
+            });
     }
 }
 
-fetchData();
+document.addEventListener('DOMContentLoaded', function() {
+    fetchData();
+});
