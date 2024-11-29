@@ -11,7 +11,7 @@
 [🚀 Installation](#installation) • [⚙️ Konfiguration](#konfiguration) • [📚 Dokumentation](#dokumentation) • [🔧 Features](#features)
 
 ---
- </div>
+</div>
  
 ## 📂 **Verzeichnisstruktur**
 
@@ -23,16 +23,21 @@
 │   ├── script.js               # JavaScript für dynamische Funktionen
 │   └── style.css               # CSS für das Design
 ├── dashboard/                  # Dashboard-Module
-│   ├── network.php             # Netzwerkübersicht
+│   ├── docker_control.php      # Docker Steuerung
 │   ├── docker.php              # Docker-Status und Verwaltung
+│   ├── logs.php                # Log-Dateien Übersicht
+│   ├── log_viewer.php          # Log-Dateien Viewer
+│   ├── network.php             # Netzwerkübersicht
 │   ├── repo.php                # Aktuelle Repository-Listen
-│   └── system_info.php         # Systeminformationen:
+│   ├── system_info.php         # Systeminformationen:
 │       ├── Systemzeit          # Aktuelle Systemzeit
 │       ├── CPU                 # CPU-Daten (Auslastung, Temperatur, Treiber, Modell)
 │       ├── Arbeitsspeicher     # RAM-Daten (Auslastung, Speichergröße, Treiber, Modell)
 │       ├── Festplatte          # HDD/SSD-Daten (Auslastung, Speichergröße, Treiber, Modell)
 │       ├── Betriebssystem      # OS-Details (Treiber, Modell)
 │       └── Prozesse            # Übersicht über laufende Prozesse
+│   ├── upconfig.php            # Konfigurationsdateien und Fehlerprotokolle
+│   └── updates.php             # Git-Updates Übersicht
 ```
 <details>
 <summary>Erklärung der Module:</summary>
@@ -42,11 +47,19 @@
   - **`nav.php`**: Die Navigationsleiste der Anwendung.
   - **`header.php`**: Kopfbereich (Header) der Seiten.
   - **`script.js`**: JavaScript für dynamische Funktionen im Dashboard.
+  - **`index.php`**: Der Einstiegspunkt für die Anwendung, wird beim Aufruf der Seite geladen.
+- **`src/`**: Enthält alle grundlegenden Skripte und Styles:
+  - **`nav.php`**: Die Navigationsleiste der Anwendung.
+  - **`header.php`**: Kopfbereich (Header) der Seiten.
+  - **`script.js`**: JavaScript für dynamische Funktionen im Dashboard.
   - **`style.css`**: Stylesheets für das Design und Layout des Dashboards.
   
 - **`dashboard/`**: Die verschiedenen Module für das Dashboard:
-  - **`network.php`**: Zeigt die Netzwerkübersicht und Schnittstellen an.
+  - **`docker_control.php`**: Steuerung der Docker-Container (Starten, Stoppen, Löschen, Erstellen).
   - **`docker.php`**: Verwaltung und Übersicht über Docker-Container.
+  - **`logs.php`**: Übersicht über alle Log-Dateien.
+  - **`log_viewer.php`**: Anzeige der letzten 50 Einträge einer ausgewählten Log-Datei.
+  - **`network.php`**: Zeigt die Netzwerkübersicht und Schnittstellen an.
   - **`repo.php`**: Anzeige der aktuellen Repositories und deren Status.
   - **`system_info.php`**: Verschiedene Systeminformationen:
     - **`Systemzeit`**: Anzeige der aktuellen Systemzeit.
@@ -55,11 +68,12 @@
     - **`Festplatte`**: Informationen zu HDD/SSD (Speicher, Auslastung, Treiber, Modell).
     - **`Betriebssystem`**: Details zum Betriebssystem (Treiber, Modell).
     - **`Prozesse`**: Übersicht über alle laufenden Prozesse.
+  - **`upconfig.php`**: Abrufen und Anzeigen von Apache- und PHP-Fehlerprotokollen sowie Apache-Konfigurationsdateien.
+  - **`updates.php`**: Anzeige der letzten Git-Commits und Dateiänderungen.
 
 </details>
 
 <div align="center">
-
 
 ---
 
@@ -105,23 +119,17 @@ bash
 sudo apt update
 sudo apt install -y lm-sensors lscpu dmidecode apache2 php8.2
 
-
-
 ### 2️⃣ **Sensoren einrichten**
 Ermöglichen Sie die Erfassung von Temperatur- und Hardwaredaten:
 
 bash
 sudo sensors-detect
 
-
-
 ### 3️⃣ **Apache2 konfigurieren**
 Um die Anwendung über Apache2 verfügbar zu machen:
 
 bash
 sudo nano /etc/apache2/sites-available/mintron.conf
-
-
 
 Fügen Sie die folgende Konfiguration hinzu:
 
@@ -139,15 +147,11 @@ plaintext
     CustomLog ${APACHE_LOG_DIR}/mintron_access.log combined
 </VirtualHost>
 
-
-
 **Konfiguration aktivieren und Apache neustarten:**
 
 bash
 sudo a2ensite mintron.conf
 sudo systemctl reload apache2
-
-
 
 ---
 
@@ -158,8 +162,6 @@ Stellen Sie sicher, dass die Verzeichnisrechte korrekt gesetzt sind:
 bash
 sudo chown -R www-data:www-data /path/to/mintron
 sudo chmod -R 755 /path/to/mintron
-
-
 
 ---
 ```
@@ -189,6 +191,10 @@ graph LR
 - Verbindungsstatistiken
 - Netzwerkkonfiguration
 
+### 📝 Log-Dateien
+- Übersicht aller `.log` Dateien
+- Anzeige der letzten 50 Einträge einer ausgewählten Log-Datei
+
 ## 📊 Dashboard Module
 
 | Modul | Beschreibung | Status |
@@ -197,6 +203,7 @@ graph LR
 | Docker | Container Management | ✅ |
 | Network | Interface Control | ✅ |
 | Repos | Repository Management | 🚧 |
+| Logs | Log-Dateien Übersicht | ✅ |
 
 ## 🔜 Roadmap
 
@@ -222,8 +229,6 @@ gantt
 bash
    sudo apt install apache2
 
-
-
 2. Erstelle eine neue Konfigurationsdatei:
    
 
@@ -240,14 +245,11 @@ bash
    sudo a2ensite mintron.conf
    sudo systemctl reload apache2
 
-
-
 4. Überprüfen, ob Apache läuft:
    
 
 bash
    systemctl status apache2
-
 
 </details>
 
@@ -261,8 +263,6 @@ bash
    sudo apt install software-properties-common
    sudo add-apt-repository ppa:ondrej/php
 
-
-
 2. Installiere PHP 8.2:
    
 
@@ -270,22 +270,17 @@ bash
    sudo apt update
    sudo apt install php8.2 libapache2-mod-php8.2
 
-
-
 3. Überprüfen Sie die PHP-Version:
    
 
 bash
    php -v
 
-
-
 4. Apache2 mit PHP-Unterstützung neustarten:
    
 
 bash
    sudo systemctl restart apache2
-
 
 </details>
 
@@ -297,21 +292,16 @@ Für ein komplett neues System sollten folgende Pakete zusätzlich installiert w
 bash
 sudo apt install -y curl git unzip zip
 
-
-
 Docker-Installation (falls benötigt):
 
 bash
 sudo apt install -y docker.io
 sudo systemctl enable --now docker
 
-
-
 Nützliche Werkzeuge:
 
 bash
 sudo apt install htop ncdu net-tools
-
 
 </details>
 
@@ -324,14 +314,11 @@ bash
 sudo chown -R www-data:www-data /path/to/mintron
 sudo chmod -R 755 /path/to/mintron
 
-
-
 Wenn PHP-Dateien nicht ausführbar sind, prüfen Sie die Apache-Einstellungen:
 
 bash
 sudo a2enmod php8.2
 sudo systemctl restart apache2
-
 
 </details>
 
@@ -365,8 +352,6 @@ MIT © [GSign061]
 ### To-Do-Liste für geplante Funktionen und zukünftige Integrationen
 
 Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen für das Mintron-Dashboard:
-
-
 
 #### **1. Docker-Dashboard**
 **Funktionen:**
@@ -431,3 +416,4 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 [⬆️ Nach oben](#mintron-dashboard)
 
 </div>
+---
