@@ -349,17 +349,17 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 
 #### **1. Docker-Dashboard**
 **Funktionen:**
-- Container bearbeiten, starten, stoppen, löschen
-- Neue Container hinzufügen
-- Details anzeigen (z. B. Status, Name, ID)
-- Log-Ansicht der Container
+- ✅ Container bearbeiten, starten, stoppen, löschen
+- ✅ Neue Container hinzufügen
+- ✅ Details anzeigen (z. B. Status, Name, ID)
+- ✅ Log-Ansicht der Container
 - Integration von Docker-Statistiken (Ressourcenverbrauch)
 
 ---
 
 #### **2. Repository-Management (repo.php)**
 **Funktionen:**
-- Repositories anzeigen, bearbeiten und löschen
+- ✅ Repositories anzeigen, bearbeiten und löschen
 - Neues Repository hinzufügen
 - Prüfung der Repository-Verfügbarkeit
 - Automatische Aktualisierungsliste (apt update)
@@ -370,7 +370,7 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 #### **3. Netzwerkschnittstellen**
 **Änderungen:**
 - Überflüssige Buttons oder redundante Aktionen entfernen
-- Details zu aktiven Schnittstellen anzeigen (z. B. IP-Adresse, MAC-Adresse, Status)
+- ✅ Details zu aktiven Schnittstellen anzeigen (z. B. IP-Adresse, MAC-Adresse, Status)
 - Möglichkeit, Schnittstellen zu aktivieren oder deaktivieren
 
 ---
@@ -410,4 +410,3 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 [⬆️ Nach oben](#mintron-dashboard)
 
 </div>
----
