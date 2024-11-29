@@ -40,7 +40,6 @@ $fileChanges = getFileChanges();
             <li><?php echo htmlspecialchars($commit); ?></li>
         <?php endforeach; ?>
     </ul>
-
     <h2>Letzte Änderungen an Dateien</h2>
     <ul>
         <?php foreach ($fileChanges as $change): ?>
