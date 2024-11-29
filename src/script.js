@@ -10,7 +10,6 @@ function fetchData() {
             document.getElementById('disk').textContent = (data.disk.free / (1024 * 1024 * 1024)).toFixed(2);
             document.getElementById('os').textContent = data.os;
             document.getElementById('processes').textContent = data.processes;
-
             // Netzwerkschnittstellen laden
             const networkTable = document.getElementById('network-table');
             if (networkTable) {
@@ -22,7 +21,6 @@ function fetchData() {
                     </tr>`;
                 }).join('');
             }
-
             // Repositorys laden
             const reposTable = document.getElementById('repos-table');
             if (reposTable) {
@@ -35,7 +33,6 @@ function fetchData() {
                     </tr>
                 `).join('');
             }
-
             // Docker-Container laden
             fetch('dashboard/docker_control.php')
                 .then(response => response.json())
@@ -47,13 +44,11 @@ function fetchData() {
                             ? '<span style="color: green;">Docker läuft</span>'
                             : '<span style="color: red;">Docker gestoppt</span>';
                     }
-
                     // Docker-Fehlerprotokolle anzeigen
                     const dockerLogs = document.getElementById('docker-logs');
                     if (dockerLogs) {
                         dockerLogs.textContent = dockerData.docker_logs;
                     }
-
                     // Docker-Container anzeigen
                     const dockerTable = document.getElementById('docker-table');
                     if (dockerTable) {
@@ -76,6 +71,51 @@ function fetchData() {
                         }
                     }
                 });
+        });
+
+    // Konfigurationsdaten laden
+    fetch('dashboard/upconfig.php')
+        .then(response => response.json())
+        .then(data => {
+            const configContainer = document.getElementById('upconfig');
+            if (configContainer) {
+                configContainer.innerHTML = `
+                    <h2>Apache Konfigurationsdateien</h2>
+                    <pre>${data.apache_conf_files}</pre>
+                    <h2>Apache Fehlerprotokoll</h2>
+                    <pre>${data.apache_error_log}</pre>
+                    <h2>PHP Fehlerprotokoll</h2>
+                    <pre>${data.php_error_log}</pre>
+                `;
+            }
+        });
+
+    // Log-Dateien laden
+    fetch('dashboard/log_viewer.php')
+        .then(response => response.json())
+        .then(data => {
+            const logFilesContainer = document.getElementById('log-files');
+            if (logFilesContainer) {
+                logFilesContainer.innerHTML = data.log_files.map(file => `
+                    <div>
+                        <a href="#" onclick="viewLog('${file}')">${file}</a>
+                    </div>
+                `).join('');
+            }
+        });
+}
+
+function viewLog(file) {
+    fetch(`dashboard/log_viewer.php?file=${encodeURIComponent(file)}`)
+        .then(response => response.json())
+        .then(data => {
+            const logContentContainer = document.getElementById('log-content');
+            if (logContentContainer) {
+                logContentContainer.innerHTML = `
+                    <h2>Log Datei: ${file}</h2>
+                    <pre>${data.log_content}</pre>
+                `;
+            }
         });
 }
 
@@ -159,4 +199,24 @@ function deleteDocker(id) {
 
 document.addEventListener('DOMContentLoaded', function() {
     fetchData();
+    setInterval(fetchData, 5000); // Aktualisiere die Daten alle 5 Sekunden
+});
+
+// Realistischere Animationen hinzufügen
+document.addEventListener('mousemove', function(e) {
+    const wave = document.createElement('div');
+    wave.className = 'wave';
+    wave.style.left = `${e.pageX}px`;
+    wave.style.top = `${e.pageY}px`;
+    document.body.appendChild(wave);
+    setTimeout(() => wave.remove(), 1000);
+});
+
+document.addEventListener('click', function(e) {
+    const pulse = document.createElement('div');
+    pulse.className = 'pulse';
+    pulse.style.left = `${e.pageX - 25}px`; // Zentriere den Effekt
+    pulse.style.top = `${e.pageY - 25}px`; // Zentriere den Effekt
+    document.body.appendChild(pulse);
+    setTimeout(() => pulse.remove(), 1000);
 });

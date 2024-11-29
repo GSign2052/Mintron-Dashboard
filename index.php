@@ -29,7 +29,13 @@
                 <?php include 'dashboard/docker.php'; ?>
             </div>
             <div id="updates" class="view" style="display:none;">
-                <?php include 'dashboard/updates.php'; ?> <!-- Neuer Abschnitt für Updates -->
+                <?php include 'dashboard/updates.php'; ?>
+            </div>
+            <div id="upconfig" class="view" style="display:none;">
+                <?php include 'dashboard/upconfig.php'; ?>
+            </div>
+            <div id="logs" class="view" style="display:none;">
+                <?php include 'dashboard/logs.php'; ?> <!-- Neuer Abschnitt für Log Dateien -->
             </div>
         </div>
     </div>

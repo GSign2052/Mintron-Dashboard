@@ -50,6 +50,7 @@ switch ($action) {
         // Docker-Container-Informationen abrufen
         $output = shell_exec("docker ps -a --format '{{.ID}}|{{.Names}}|{{.Status}}'");
         $containers = explode("\n", trim($output));
+
         echo json_encode([
             'docker_status' => $docker_status,
             'docker_logs' => $docker_logs,

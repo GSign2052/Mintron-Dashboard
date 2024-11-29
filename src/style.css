@@ -2,20 +2,30 @@ body {
     background-color: #000;
     color: #00FF00;
     font-family: 'Courier New', Courier, monospace;
+    overflow: auto; /* Ermöglicht das Scrollen */
+    position: relative;
 }
+
 .container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Ändere flex-wrap auf nowrap */
 }
+
 .nav {
     width: 200px;
     padding: 20px;
     border-right: 1px solid #00FF00;
 }
+
 .content {
     flex-grow: 1;
     padding: 20px;
 }
+
+#inwork {
+    color: yellow;
+}
+
 .nav a {
     color: #00FF00;
     text-decoration: none;
@@ -23,28 +33,35 @@ body {
     margin-bottom: 10px;
     cursor: pointer;
 }
+
 .nav a:hover {
     text-decoration: underline;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
 }
+
 table, th, td {
     border: 1px solid #00FF00;
 }
+
 th, td {
     padding: 10px;
     text-align: left;
 }
+
 th {
     background-color: #111;
 }
+
 .actions {
     display: flex;
     gap: 10px;
 }
+
 button {
     background-color: #00FF00;
     color: #000;
@@ -52,7 +69,66 @@ button {
     padding: 5px 10px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #333;
     color: #00FF00;
+}
+
+/* Animationen */
+@keyframes wave {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.wave {
+    animation: wave 1s infinite;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0, 255, 0, 0.5);
+    pointer-events: none;
+    animation: ripple 1s linear;
+}
+
+/* Pulse-Effekt */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.pulse {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 255, 0, 0.5);
+    pointer-events: none;
+    animation: pulse 1s linear;
 }
