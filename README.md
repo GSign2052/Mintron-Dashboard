@@ -30,12 +30,6 @@
 │   ├── network.php             # Netzwerkübersicht
 │   ├── repo.php                # Aktuelle Repository-Listen
 │   ├── system_info.php         # Systeminformationen:
-│       ├── Systemzeit          # Aktuelle Systemzeit
-│       ├── CPU                 # CPU-Daten (Auslastung, Temperatur, Treiber, Modell)
-│       ├── Arbeitsspeicher     # RAM-Daten (Auslastung, Speichergröße, Treiber, Modell)
-│       ├── Festplatte          # HDD/SSD-Daten (Auslastung, Speichergröße, Treiber, Modell)
-│       ├── Betriebssystem      # OS-Details (Treiber, Modell)
-│       └── Prozesse            # Übersicht über laufende Prozesse
 │   ├── upconfig.php            # Konfigurationsdateien und Fehlerprotokolle
 │   └── updates.php             # Git-Updates Übersicht
 ```
