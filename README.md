@@ -197,7 +197,7 @@ graph LR
 | Docker | Container Management | ✅ |
 | Network | Interface Control | ✅ |
 | Repos | Repository Management | 🚧 |
-| Logs | Log-Dateien Übersicht | ✅ |
+| Logs | Log-Dateien Übersicht | 🚧 |
 
 ## 🔜 Roadmap
 
@@ -352,16 +352,16 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 - ✅ Container bearbeiten, starten, stoppen, löschen
 - ✅ Neue Container hinzufügen
 - ✅ Details anzeigen (z. B. Status, Name, ID)
-- ✅ Log-Ansicht der Container
+- Log-Ansicht der Container
 - Integration von Docker-Statistiken (Ressourcenverbrauch)
 
 ---
 
 #### **2. Repository-Management (repo.php)**
 **Funktionen:**
-- ✅ Repositories anzeigen, bearbeiten und löschen
-- Neues Repository hinzufügen
-- Prüfung der Repository-Verfügbarkeit
+- Repositories anzeigen, bearbeiten und löschen
+- ✅ Neues Repository hinzufügen
+- ✅ Prüfung der Repository-Verfügbarkeit
 - Automatische Aktualisierungsliste (apt update)
 - Validierung von sources.list-Einträgen
 
@@ -369,7 +369,7 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 
 #### **3. Netzwerkschnittstellen**
 **Änderungen:**
-- Überflüssige Buttons oder redundante Aktionen entfernen
+- ✅ Überflüssige Buttons oder redundante Aktionen entfernen
 - ✅ Details zu aktiven Schnittstellen anzeigen (z. B. IP-Adresse, MAC-Adresse, Status)
 - Möglichkeit, Schnittstellen zu aktivieren oder deaktivieren
 
@@ -379,7 +379,7 @@ Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen
 **Geplante Funktionen:**
 - Anzeige der Grafikkarten-Treiber-Version
 - Speichernutzung der GPU
-- Temperaturüberwachung
+- ✅ Temperaturüberwachung
 - Unterstützung für NVIDIA/AMD/Intel GPUs (mit Tools wie nvidia-smi oder rocm-smi)
 
 ---
