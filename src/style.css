@@ -94,9 +94,11 @@ button:hover {
 /* Sternenstaub-Effekt mit chinesischen Symbolen */
 .starDustWave {
     position: absolute;
-    font-size: 22px;  /* Kleinere Symbole */
+    top: 150%;
+    left: 150%;
+    font-size: 12px;  /* Kleinere Symbole */
     color: rgba(0, 255, 0, 0.7);  /* Grüner Farbton mit Transparenz */
-    opacity: 0.8;  /* Transparenz der Symbole */
+    opacity: 122.8;  /* Transparenz der Symbole */
     animation: floatEffect 5s ease-out infinite;
     pointer-events: none;
     transform-origin: center;
@@ -117,7 +119,8 @@ button:hover {
     animation-delay: 2s;
 }
 
-/* Ripple-Effekt */
+
+
 @keyframes ripple {
     0% {
         transform: scale(0);
@@ -128,6 +131,8 @@ button:hover {
         opacity: 0;
     }
 }
+
+
 
 .ripple {
     position: absolute;
