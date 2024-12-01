@@ -12,15 +12,22 @@
 
 ---
 </div>
- 
+
+
+```
 ## 📂 **Verzeichnisstruktur**
 
 ```plaintext
 ├── index.php                   # Einstiegspunkt der Anwendung
 ├── src/                        # Quellcode-Ordner
-│   ├── nav.php                 # Navigationselemente
 │   ├── header.php              # Kopfbereich (Header) der Seiten
-│   ├── script.js               # JavaScript für dynamische Funktionen
+│   ├── nav.php                 # Navigationselemente
+│   ├── scripts/                # JavaScript-Dateien
+│   │   ├── dashboard.js        # JavaScript für das Dashboard
+│   │   ├── docker.js           # JavaScript für Docker-Module
+│   │   ├── global.js           # Globale JavaScript-Funktionen
+│   │   ├── log-viewer.js       # JavaScript für Log-Viewer
+│   │   └── network.js          # JavaScript für Netzwerkübersicht
 │   └── style.css               # CSS für das Design
 ├── dashboard/                  # Dashboard-Module
 │   ├── docker_control.php      # Docker Steuerung
@@ -33,39 +40,35 @@
 │   ├── upconfig.php            # Konfigurationsdateien und Fehlerprotokolle
 │   └── updates.php             # Git-Updates Übersicht
 ```
+
 <details>
 <summary>Erklärung der Module:</summary>
 
 - **`index.php`**: Der Einstiegspunkt für die Anwendung, wird beim Aufruf der Seite geladen.
 - **`src/`**: Enthält alle grundlegenden Skripte und Styles:
+  - **`header.php`**: Der Kopfbereich (Header) für alle Seiten.
   - **`nav.php`**: Die Navigationsleiste der Anwendung.
-  - **`header.php`**: Kopfbereich (Header) der Seiten.
-  - **`script.js`**: JavaScript für dynamische Funktionen im Dashboard.
-  - **`index.php`**: Der Einstiegspunkt für die Anwendung, wird beim Aufruf der Seite geladen.
-- **`src/`**: Enthält alle grundlegenden Skripte und Styles:
-  - **`nav.php`**: Die Navigationsleiste der Anwendung.
-  - **`header.php`**: Kopfbereich (Header) der Seiten.
-  - **`script.js`**: JavaScript für dynamische Funktionen im Dashboard.
-  - **`style.css`**: Stylesheets für das Design und Layout des Dashboards.
+  - **`scripts/`**: Enthält JavaScript-Dateien für dynamische Funktionen:
+    - **`dashboard.js`**: JavaScript für die Verwaltung des Dashboards.
+    - **`docker.js`**: JavaScript für die Interaktion mit Docker-Containern.
+    - **`global.js`**: Enthält allgemeine JavaScript-Funktionen für die Anwendung.
+    - **`log-viewer.js`**: JavaScript für die Anzeige von Log-Dateien.
+    - **`network.js`**: JavaScript für die Netzwerkübersicht und -interaktionen.
+  - **`style.css`**: Stile für das Design und Layout des Dashboards.
   
-- **`dashboard/`**: Die verschiedenen Module für das Dashboard:
-  - **`docker_control.php`**: Steuerung der Docker-Container (Starten, Stoppen, Löschen, Erstellen).
-  - **`docker.php`**: Verwaltung und Übersicht über Docker-Container.
-  - **`logs.php`**: Übersicht über alle Log-Dateien.
-  - **`log_viewer.php`**: Anzeige der letzten 50 Einträge einer ausgewählten Log-Datei.
+- **`dashboard/`**: Das Dashboard-Modul enthält verschiedene PHP-Dateien für spezifische Funktionen:
+  - **`docker_control.php`**: Steuerung von Docker-Containern (Starten, Stoppen, Löschen).
+  - **`docker.php`**: Verwaltung und Übersicht der Docker-Container.
+  - **`logs.php`**: Übersicht der Log-Dateien des Systems.
+  - **`log_viewer.php`**: Anzeige der letzten Log-Einträge einer ausgewählten Log-Datei.
   - **`network.php`**: Zeigt die Netzwerkübersicht und Schnittstellen an.
-  - **`repo.php`**: Anzeige der aktuellen Repositories und deren Status.
-  - **`system_info.php`**: Verschiedene Systeminformationen:
-    - **`Systemzeit`**: Anzeige der aktuellen Systemzeit.
-    - **`CPU`**: Zeigt Auslastung, Temperatur, Treiber und Modellinformationen der CPU.
-    - **`Arbeitsspeicher`**: Informationen zu RAM (Auslastung, Speichergröße, Treiber, Modell).
-    - **`Festplatte`**: Informationen zu HDD/SSD (Speicher, Auslastung, Treiber, Modell).
-    - **`Betriebssystem`**: Details zum Betriebssystem (Treiber, Modell).
-    - **`Prozesse`**: Übersicht über alle laufenden Prozesse.
-  - **`upconfig.php`**: Abrufen und Anzeigen von Apache- und PHP-Fehlerprotokollen sowie Apache-Konfigurationsdateien.
-  - **`updates.php`**: Anzeige der letzten Git-Commits und Dateiänderungen.
+  - **`repo.php`**: Anzeige der aktuellen Repository-Listen und deren Status.
+  - **`system_info.php`**: Systeminformationen, wie CPU-Auslastung, RAM-Nutzung, Festplattenspeicher und mehr.
+  - **`upconfig.php`**: Anzeigen von Apache- und PHP-Fehlerprotokollen sowie Konfigurationsdateien.
+  - **`updates.php`**: Übersicht der letzten Git-Commits und Dateiänderungen.
 
 </details>
+```
 
 <div align="center">
 
