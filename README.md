@@ -1,21 +1,18 @@
 <div align="center">
-  
+
 # 🎯 Mintron Dashboard
 
-[![Linux Mint](https://img.shields.io/badge/Linux%20Mint-22-87CF3E?style=for-the-badge&logo=linux-mint&logoColor=white)](https://linuxmint.com/)
-[![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
-[![Apache](https://img.shields.io/badge/Apache-2.4-D22128?style=for-the-badge&logo=apache&logoColor=white)](https://httpd.apache.org/)
+[![Linux Mint](https://img.shields.io/badge/Linux%20Mint-21.2-87CF3E?style=for-the-badge&logo=linux-mint&logoColor=white)](https://linuxmint.com/)
+[![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![Apache](https://img.shields.io/badge/Apache-2.4.58-D22128?style=for-the-badge&logo=apache&logoColor=white)](https://httpd.apache.org/)
 
 *Ein modernes, flexibles Dashboard für Systemverwaltung und Monitoring*
 
-[🚀 Installation](#installation) • [⚙️ Konfiguration](#konfiguration) • [📚 Dokumentation](#dokumentation) • [🔧 Features](#features)
-
 ---
+
 </div>
 
-
-```
-## 📂 **Verzeichnisstruktur**
+## 📂 Verzeichnisstruktur
 
 ```plaintext
 ├── index.php                   # Einstiegspunkt der Anwendung
@@ -36,47 +33,10 @@
 │   ├── log_viewer.php          # Log-Dateien Viewer
 │   ├── network.php             # Netzwerkübersicht
 │   ├── repo.php                # Aktuelle Repository-Listen
-│   ├── system_info.php         # Systeminformationen:
+│   ├── system_info.php         # Systeminformationen
 │   ├── upconfig.php            # Konfigurationsdateien und Fehlerprotokolle
 │   └── updates.php             # Git-Updates Übersicht
 ```
-
-<details>
-<summary>Erklärung der Module:</summary>
-
-- **`index.php`**: Der Einstiegspunkt für die Anwendung, wird beim Aufruf der Seite geladen.
-- **`src/`**: Enthält alle grundlegenden Skripte und Styles:
-  - **`header.php`**: Der Kopfbereich (Header) für alle Seiten.
-  - **`nav.php`**: Die Navigationsleiste der Anwendung.
-  - **`scripts/`**: Enthält JavaScript-Dateien für dynamische Funktionen:
-    - **`dashboard.js`**: JavaScript für die Verwaltung des Dashboards.
-    - **`docker.js`**: JavaScript für die Interaktion mit Docker-Containern.
-    - **`global.js`**: Enthält allgemeine JavaScript-Funktionen für die Anwendung.
-    - **`log-viewer.js`**: JavaScript für die Anzeige von Log-Dateien.
-    - **`network.js`**: JavaScript für die Netzwerkübersicht und -interaktionen.
-  - **`style.css`**: Stile für das Design und Layout des Dashboards.
-  
-- **`dashboard/`**: Das Dashboard-Modul enthält verschiedene PHP-Dateien für spezifische Funktionen:
-  - **`docker_control.php`**: Steuerung von Docker-Containern (Starten, Stoppen, Löschen).
-  - **`docker.php`**: Verwaltung und Übersicht der Docker-Container.
-  - **`logs.php`**: Übersicht der Log-Dateien des Systems.
-  - **`log_viewer.php`**: Anzeige der letzten Log-Einträge einer ausgewählten Log-Datei.
-  - **`network.php`**: Zeigt die Netzwerkübersicht und Schnittstellen an.
-  - **`repo.php`**: Anzeige der aktuellen Repository-Listen und deren Status.
-  - **`system_info.php`**: Systeminformationen, wie CPU-Auslastung, RAM-Nutzung, Festplattenspeicher und mehr.
-  - **`upconfig.php`**: Anzeigen von Apache- und PHP-Fehlerprotokollen sowie Konfigurationsdateien.
-  - **`updates.php`**: Übersicht der letzten Git-Commits und Dateiänderungen.
-
-</details>
-```
-
-<div align="center">
-
----
-
-![Bildbeschreibung](https://github.com/GSign2052/Mintron-Dashboard/raw/main/mintron.png)
-
-</div>
 
 ---
 
@@ -84,13 +44,15 @@
 
 <div align="center">
 
-| 🔍 Live Monitoring | 🐳 Docker Integration | 🌐 Netzwerk Management | 💾 System Info |
-|-------------------|----------------------|----------------------|----------------|
-| Echtzeit Updates | Container Verwaltung | Interface Kontrolle | Hardware Stats |
+| 🔍 **Live Monitoring** | 🐳 **Docker Integration** | 🌐 **Netzwerk Management** | 💾 **System Info** |
+|-----------------------|--------------------------|---------------------------|--------------------|
+| Echtzeit Updates       | Container Verwaltung      | Interface Kontrolle        | Hardware Stats     |
 
 </div>
 
 ## 🚀 Installation
+
+Für eine frische Installation eines Systems und die Einrichtung des Mintron Dashboards, folge diesen Schritten:
 
 ```bash
 # 1. Repository klonen
@@ -98,7 +60,7 @@ git clone https://github.com/GSign061/mintron-dashboard.git
 
 # 2. Abhängigkeiten installieren
 sudo apt update
-sudo apt install -y apache2 php8.2 lm-sensors
+sudo apt install -y apache2 php8.4 lm-sensors
 
 # 3. Apache konfigurieren
 sudo cp config/mintron.conf /etc/apache2/sites-available/
@@ -110,27 +72,23 @@ sudo a2ensite mintron.conf
 
 ```bash
 ### 1️⃣ **Systempakete installieren**
-Führen Sie die folgenden Befehle aus, um benötigte Pakete und Tools zu installieren:
+Führe die folgenden Befehle aus, um benötigte Pakete und Tools zu installieren:
 
-bash
 sudo apt update
-sudo apt install -y lm-sensors lscpu dmidecode apache2 php8.2
+sudo apt install -y apache2 php8.4 lm-sensors lscpu dmidecode
 
 ### 2️⃣ **Sensoren einrichten**
-Ermöglichen Sie die Erfassung von Temperatur- und Hardwaredaten:
+Ermögliche die Erfassung von Temperatur- und Hardwaredaten:
 
-bash
 sudo sensors-detect
 
 ### 3️⃣ **Apache2 konfigurieren**
 Um die Anwendung über Apache2 verfügbar zu machen:
 
-bash
 sudo nano /etc/apache2/sites-available/mintron.conf
 
-Fügen Sie die folgende Konfiguration hinzu:
+Füge die folgende Konfiguration hinzu:
 
-plaintext
 <VirtualHost *:80>
     ServerName localhost
     DocumentRoot /path/to/mintron
@@ -144,26 +102,22 @@ plaintext
     CustomLog ${APACHE_LOG_DIR}/mintron_access.log combined
 </VirtualHost>
 
-**Konfiguration aktivieren und Apache neustarten:**
+Aktiviere die Konfiguration und starte Apache neu:
 
-bash
 sudo a2ensite mintron.conf
 sudo systemctl reload apache2
 
----
+### ⚙️ **Rechte konfigurieren**
 
-## ⚙️ **Rechte konfigurieren**
+Stelle sicher, dass die Verzeichnisrechte korrekt gesetzt sind:
 
-Stellen Sie sicher, dass die Verzeichnisrechte korrekt gesetzt sind:
-
-bash
 sudo chown -R www-data:www-data /path/to/mintron
 sudo chmod -R 755 /path/to/mintron
-
----
 ```
 
 </details>
+
+---
 
 ## 🎯 Features
 
@@ -192,15 +146,18 @@ graph LR
 - Übersicht aller `.log` Dateien
 - Anzeige der letzten 50 Einträge einer ausgewählten Log-Datei
 
-## 📊 Dashboard Module
+---
 
-| Modul | Beschreibung | Status |
-|-------|-------------|---------|
-| System Info | Hardware & OS Details | ✅ |
-| Docker | Container Management | ✅ |
-| Network | Interface Control | ✅ |
-| Repos | Repository Management | 🚧 |
-| Logs | Log-Dateien Übersicht | 🚧 |
+## 📝 To-Do Liste
+
+### Geplante Funktionen & Integrationen
+- **📡 Erweiterte Netzwerküberwachung**: Integrierte Visualisierungen für Netzwerkverkehr und Verbindungsqualität.
+- **📦 Docker Swarm Management**: Erweiterung zur Verwaltung von Docker Swarm Clustern.
+- **🧹 Automatische Backups**: Integration für automatische Datenbank- und Systembackups.
+- **⚠️ Alarme & Benachrichtigungen**: Echtzeit-Benachrichtigungen bei Systemausfällen oder ungewöhnlichem Verhalten.
+- **💻 Multi-User Support**: Unterstützung für mehrere Benutzer mit unterschiedlichen Berechtigungsstufen.
+
+---
 
 ## 🔜 Roadmap
 
@@ -212,204 +169,85 @@ gantt
     section Phase 2
     Docker Integration   :active,  des2, 2024-02-01, 45d
     section Phase 3
-    Network Tools       :         des3, after des2, 30d
+    Netzwerk Tools       :         des3, after des2, 30d
 ```
 
-## 📖 **Hilfen**
+---
 
-<details>
-<summary>❓ Apache2 installieren und konfigurieren</summary>
+## 📚 Dokumentation
 
-1. Installiere Apache2:
-   
+Für detailliertere Informationen über die einzelnen Funktionen und Konfigurationen:
 
-bash
-   sudo apt install apache2
-
-2. Erstelle eine neue Konfigurationsdatei:
-   
-
-bash
-   sudo nano /etc/apache2/sites-available/mintron.conf
-
-
-   (Inhalt siehe oben)
-
-3. Aktiviere die Konfiguration und starte Apache neu:
-   
-
-bash
-   sudo a2ensite mintron.conf
-   sudo systemctl reload apache2
-
-4. Überprüfen, ob Apache läuft:
-   
-
-bash
-   systemctl status apache2
-
-</details>
-
-<details>
-<summary>❓ PHP installieren</summary>
-
-1. Füge das PHP-Repository hinzu (falls nicht vorhanden):
-   
-
-bash
-   sudo apt install software-properties-common
-   sudo add-apt-repository ppa:ondrej/php
-
-2. Installiere PHP 8.2:
-   
-
-bash
-   sudo apt update
-   sudo apt install php8.2 libapache2-mod-php8.2
-
-3. Überprüfen Sie die PHP-Version:
-   
-
-bash
-   php -v
-
-4. Apache2 mit PHP-Unterstützung neustarten:
-   
-
-bash
-   sudo systemctl restart apache2
-
-</details>
-
-<details>
-<summary>❓ Zusätzliche Pakete für ein neues System</summary>
-
-Für ein komplett neues System sollten folgende Pakete zusätzlich installiert werden:
-
-bash
-sudo apt install -y curl git unzip zip
-
-Docker-Installation (falls benötigt):
-
-bash
-sudo apt install -y docker.io
-sudo systemctl enable --now docker
-
-Nützliche Werkzeuge:
-
-bash
-sudo apt install htop ncdu net-tools
-
-</details>
-
-<details>
-<summary>❓ Rechte-Management</summary>
-
-Stellen Sie sicher, dass Apache die richtigen Rechte hat:
-
-bash
-sudo chown -R www-data:www-data /path/to/mintron
-sudo chmod -R 755 /path/to/mintron
-
-Wenn PHP-Dateien nicht ausführbar sind, prüfen Sie die Apache-Einstellungen:
-
-bash
-sudo a2enmod php8.2
-sudo systemctl restart apache2
-
-</details>
+- **System Monitoring**: Detaillierte Systeminformationen, wie CPU-, RAM- und Festplattendaten.
+- **Docker Management**: Steuerung und Überwachung von Docker-Containern.
+- **Log-Dateien**: Übersicht und Anzeige von Log-Dateien für Fehlerbehebung und Monitoring.
+- **Netzwerk Tools**: Informationen über Netzwerkverbindungen und Schnittstellen.
 
 ---
 
-## 🔗 **Dashboard starten**
+## 🤝 Mitmachen
 
-Öffnen Sie das Dashboard nach der Installation im Webbrowser:
-
-plaintext
-http://localhost/index.php
-
-## 💡 Beitragen
-
-```
-🌟 Fork -> 🔧 Feature -> 🚀 Pull Request
-```
-
-## 📄 Lizenz
-
-MIT © [GSign061]
+Hilf mit, das Mintron Dashboard noch besser zu machen! Sieh dir die [öffentlichen Issues](https://github.com/GSign061/mintron-dashboard/issues) an und trage deinen Teil dazu bei.
 
 ---
 
-<div align="center">
+## 📅 Versionen
 
-### 🌟 Folg uns auf GitHub!
-
----
-
-### To-Do-Liste für geplante Funktionen und zukünftige Integrationen
-
-Hier ist eine strukturierte Übersicht der geplanten und zukünftigen Funktionen für das Mintron-Dashboard:
-
-#### **1. Docker-Dashboard**
-**Funktionen:**
-- ✅ Container bearbeiten, starten, stoppen, löschen
-- ✅ Neue Container hinzufügen
-- ✅ Details anzeigen (z. B. Status, Name, ID)
-- Log-Ansicht der Container
-- Integration von Docker-Statistiken (Ressourcenverbrauch)
+- **0.1.12** – Erste alpha Version
+- **0.1.1** – Erste alpha Version
+- **0.1.0** – Erste alpha Version
 
 ---
 
-#### **2. Repository-Management (repo.php)**
-**Funktionen:**
-- Repositories anzeigen, bearbeiten und löschen
-- ✅ Neues Repository hinzufügen
-- ✅ Prüfung der Repository-Verfügbarkeit
-- Automatische Aktualisierungsliste (apt update)
-- Validierung von sources.list-Einträgen
+## 🧰 Lizenz
+
+Mintron Dashboard ist unter der MIT-Lizenz lizenziert. Weitere Details findest du in der [LICENSE](LICENSE) Datei.
 
 ---
 
-#### **3. Netzwerkschnittstellen**
-**Änderungen:**
-- ✅ Überflüssige Buttons oder redundante Aktionen entfernen
-- ✅ Details zu aktiven Schnittstellen anzeigen (z. B. IP-Adresse, MAC-Adresse, Status)
-- Möglichkeit, Schnittstellen zu aktivieren oder deaktivieren
+Hier ist deine **To-Do-Liste** für die geplanten Funktionen und zukünftigen Integrationen, übersichtlich in einer Tabelle. Ich habe die bereits implementierten Funktionen mit einem Häkchen markiert.
+
+---
+## 📝 To-Do Liste für das System
+
+### **Zusammenfassung der Funktionen**
+
+- **Bereits implementierte Funktionen** bieten umfangreiche Systemüberwachung, Performance-Optimierungen und einfache Verwaltung von Docker-Containern und Netzwerkschnittstellen.
+- **Geplante Funktionen** erweitern das System um fortgeschrittene Sicherheitsmaßnahmen wie 2FA, API-Integrationen, automatische Updates und Tools zur Virtualisierung.
+
+### **Aktuell Umgesetzte Funktionen und Geplante Integrationen**
+
+Diese Übersicht zeigt die bereits implementierten Funktionen sowie die geplanten Erweiterungen und Integrationen für das System.
 
 ---
 
-#### **4. Grafikkarten-Status und Informationen**
-**Geplante Funktionen:**
-- Anzeige der Grafikkarten-Treiber-Version
-- Speichernutzung der GPU
-- ✅ Temperaturüberwachung
-- Unterstützung für NVIDIA/AMD/Intel GPUs (mit Tools wie nvidia-smi oder rocm-smi)
+### **Bereits Implementierte Funktionen**
+
+| Nr. | Funktion & Integration                           | Status         | Bemerkungen                                      |
+|-----|--------------------------------------------------|----------------|--------------------------------------------------|
+| 6   | 📊 **Erweiterte Dashboard-Visualisierungen**      | ✅ Implementiert| Erweiterte Visualisierungen der Systemdaten im Dashboard. |
+| 5   | 📈 **Performance Optimierungen**                 | ✅ Implementiert| Optimierung der Systemleistung zur Verbesserung der Reaktionsgeschwindigkeit und Effizienz. |
+| 4   | ⚠️ **Alarme & Benachrichtigungen**               | ✅ Implementiert| Alarmsystem, das Benachrichtigungen bei kritischen Systemereignissen versendet. |
+| 3   | **Log-Dateien aus /var/logs**                    | ✅ Implementiert| Anzeige und Verwaltung von Log-Dateien aus dem Verzeichnis /var/logs. |
+| 2   | **Docker Übersicht / Status / Start/Stop/Restart**| ✅ Implementiert| Integration zur Anzeige und Steuerung von Docker-Containern (Start, Stopp, Neustart). |
+| 1   | **Netzwerkschnittstellen Übersicht**             | ✅ Implementiert| Anzeige und Übersicht aller Netzwerkschnittstellen auf dem Server. |
+| 7   | **Repositorys Übersicht**                        | ✅ Implementiert| Übersicht der System- und Software-Repositories mit Informationen zu den verwendeten Quellen. |
+| 8   | **Update Übersicht**                             | ✅ Implementiert| Übersicht der letzten Updates und Git-Commits mit Details zu Autoren, Datum und Änderungen. |
+| 9   | **Letzte Änderungen an Dateien**                 | ✅ Implementiert| Anzeige der letzten Änderungen an Systemdateien mit Commit-Informationen und Fehlermeldungen, wenn kein Git-Repository gefunden wird. |
 
 ---
 
-#### **5. Cron-Management (cron.php)**
-**Funktionen:**
-- Cron-Jobs anzeigen, hinzufügen, bearbeiten und löschen
-- Details zu jedem Job (z. B. nächster Ausführungszeitpunkt, Kommando)
-- Fehlerprüfung für Cron-Ausdrücke
-- Log-Ansicht der letzten Cron-Ausführungen
+### **Geplante Funktionen und Integrationen**
+
+| Nr. | Funktion & Integration                           | Status         | Bemerkungen                                      |
+|-----|--------------------------------------------------|----------------|--------------------------------------------------|
+| 1   | 📡 **Erweiterte Netzwerküberwachung**             | ❌ Geplant      | Umfassende Überwachung und Analyse des Netzwerkverkehrs zur Identifikation von Engpässen oder Sicherheitslücken. |
+| 2   | 🔒 **Zwei-Faktor-Authentifizierung (2FA)**        | ❌ Geplant      | Integration von 2FA zur Verbesserung der Sicherheit beim Zugriff auf das System. |
+| 3   | 📚 **API für externe Anwendungen**              | ❌ Geplant      | Bereitstellung einer API, die externen Anwendungen den Zugriff auf bestimmte Systemdaten ermöglicht. |
+| 4   | ⚙️ **Automatische System-Updates**               | ❌ Geplant      | Implementierung eines Mechanismus für automatische System- und Software-Updates. |
+| 5   | 🔗 **Integrierte Tools für Fehlerbehebung**      | ❌ Geplant      | Bereitstellung von automatisierten Tools zur Fehlerdiagnose und -behebung im System. |
+| 6   | 🔌 **Erweiterung für Virtualisierung**           | ❌ Geplant      | Integration von Virtualisierungsplattformen, um das System um virtuelle Maschinen und Container zu erweitern. |
+| 7   | **nginx / apache.ini und conf Übersicht und Bearbeitungsfunktion** | ❌ Geplant | Eine Übersicht und Bearbeitungsfunktion für nginx- und apache-Konfigurationsdateien wird entwickelt. |
 
 ---
 
-#### **Zukünftige Integration (geplant):**
-
-##### **Dateimanager**
-- Anzeigen, Hochladen und Bearbeiten von Dateien direkt im Dashboard
-- Rechte-Management (Lesen, Schreiben, Ausführen)
-- Unterstützung für gängige Dateiformate
-
-##### **Terminal**
-- Ein eingebettetes Terminal für direkte Befehlsausführung
-- Authentifizierung für sensible Operationen
-- Unterstützung für Syntax-Highlighting
-
----
-
-[⬆️ Nach oben](#mintron-dashboard)
-
-</div>
