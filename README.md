@@ -148,17 +148,6 @@ graph LR
 
 ---
 
-## 📝 To-Do Liste
-
-### Geplante Funktionen & Integrationen
-- **📡 Erweiterte Netzwerküberwachung**: Integrierte Visualisierungen für Netzwerkverkehr und Verbindungsqualität.
-- **📦 Docker Swarm Management**: Erweiterung zur Verwaltung von Docker Swarm Clustern.
-- **🧹 Automatische Backups**: Integration für automatische Datenbank- und Systembackups.
-- **⚠️ Alarme & Benachrichtigungen**: Echtzeit-Benachrichtigungen bei Systemausfällen oder ungewöhnlichem Verhalten.
-- **💻 Multi-User Support**: Unterstützung für mehrere Benutzer mit unterschiedlichen Berechtigungsstufen.
-
----
-
 ## 🔜 Roadmap
 
 ```mermaid
@@ -208,20 +197,12 @@ Mintron Dashboard ist unter der MIT-Lizenz lizenziert. Weitere Details findest d
 Hier ist deine **To-Do-Liste** für die geplanten Funktionen und zukünftigen Integrationen, übersichtlich in einer Tabelle. Ich habe die bereits implementierten Funktionen mit einem Häkchen markiert.
 
 ---
+
 ## 📝 To-Do Liste für das System
 
 ### **Zusammenfassung der Funktionen**
-
 - **Bereits implementierte Funktionen** bieten umfangreiche Systemüberwachung, Performance-Optimierungen und einfache Verwaltung von Docker-Containern und Netzwerkschnittstellen.
 - **Geplante Funktionen** erweitern das System um fortgeschrittene Sicherheitsmaßnahmen wie 2FA, API-Integrationen, automatische Updates und Tools zur Virtualisierung.
-
-### **Aktuell Umgesetzte Funktionen und Geplante Integrationen**
-
-Diese Übersicht zeigt die bereits implementierten Funktionen sowie die geplanten Erweiterungen und Integrationen für das System.
-
----
-
-### **Bereits Implementierte Funktionen**
 
 | Nr. | Funktion & Integration                           | Status         | Bemerkungen                                      |
 |-----|--------------------------------------------------|----------------|--------------------------------------------------|
