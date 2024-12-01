@@ -5,7 +5,6 @@
         <!-- Log-Dateien werden hier angezeigt -->
     </div>
     <div id="log-content">
-                <p style="color: red">Es werden keine logs angezeigt</p>
 
         <!-- Log-Inhalt wird hier angezeigt -->
     </div>
