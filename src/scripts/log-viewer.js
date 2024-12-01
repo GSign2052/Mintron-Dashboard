@@ -1,5 +1,5 @@
 function viewLog(file) {
-    fetch(`dashboard/log_viewer.php?file=${encodeURIComponent(file)}`)
+    fetch(`/dashboard/log_viewer.php?file=${encodeURIComponent(file)}`)
         .then(response => response.json())
         .then(data => {
             const logContentContainer = document.getElementById('log-content');

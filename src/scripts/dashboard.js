@@ -1,6 +1,6 @@
 // Funktion zum Abrufen der Systeminformationen
 function fetchData() {
-    fetch('dashboard/system_info.php')
+    fetch('/dashboard/system_info.php')
         .then(response => response.json())
         .then(data => {
             document.getElementById('time').textContent = data.time;

@@ -1,5 +1,5 @@
 function startDocker(id) {
-    fetch(`dashboard/docker_control.php?action=start&id=${id}`)
+    fetch(`/dashboard/docker_control.php?action=start&id=${id}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -12,7 +12,7 @@ function startDocker(id) {
 }
 
 function stopDocker(id) {
-    fetch(`dashboard/docker_control.php?action=stop&id=${id}`)
+    fetch(`/dashboard/docker_control.php?action=stop&id=${id}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -26,7 +26,7 @@ function stopDocker(id) {
 
 function deleteDocker(id) {
     if (confirm(`Bist du sicher, dass du den Docker-Container ${id} löschen möchtest?`)) {
-        fetch(`dashboard/docker_control.php?action=delete&id=${id}`)
+        fetch(`/dashboard/docker_control.php?action=delete&id=${id}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
