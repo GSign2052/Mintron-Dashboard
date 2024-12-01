@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docker Dashboard</title>
-    <link rel="stylesheet" href="../src/style.css">
+    <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
     <h2>Docker Dashboard</h2>
@@ -29,6 +29,5 @@
     <div id="docker-logs">
         <!-- Docker-Fehlerprotokolle werden hier angezeigt -->
     </div>
-    <script src="/src/script.js"></script>
 </body>
 </html>

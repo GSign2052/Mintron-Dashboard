@@ -43,9 +43,20 @@ $network = shell_exec('ip -o addr show | awk \'{print $2 "|" $4}\'');
 // Reposity Listen
 $repos = shell_exec('grep -rh ^deb /etc/apt/sources.list /etc/apt/sources.list.d/');
 
-// Docker-Container
 $docker = shell_exec('docker ps -a --format "{{.ID}}|{{.Names}}|{{.Status}}"');
+if (empty($docker)) {
+    $docker = "Keine Container gefunden.";
+}
 
+
+// Docker-Container in ein Array umwandeln
+$docker_arr = explode("\n", trim($docker));
+$docker_data = [];
+foreach ($docker_arr as $container) {
+    $docker_data[] = explode("|", $container);
+}
+
+// Docker-Daten in das Array einfügen
 $data = [
     'time' => $time,
     'cpu' => $cpu,
@@ -63,8 +74,10 @@ $data = [
     'processes' => trim($processes),
     'network' => trim($network),
     'repos' => trim($repos),
-    'docker' => trim($docker)
+    'docker' => [
+        'status' => 'running',  // Hier könnte auch der Status des Docker-Daemons ermittelt werden
+        'containers' => $docker_data
+    ]
 ];
 
 echo json_encode($data);
-?>

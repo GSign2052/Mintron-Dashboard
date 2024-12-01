@@ -39,6 +39,12 @@
             </div>
         </div>
     </div>
-    <script src="src/script.js"></script>
+    <!-- Einbindung der JavaScript-Dateien -->
+    <script src="/src/scripts/dashboard.js"></script>
+    <script src="/src/scripts/docker.js"></script>
+    <script src="/src/scripts/global.js"></script>
+    <script src="/src/scripts/log-viewer.js"></script>
+    <script src="/src/scripts/network.js"></script>
+
 </body>
 </html>

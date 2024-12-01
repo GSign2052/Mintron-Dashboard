@@ -1,0 +1,648 @@
+-------
+/var/www/mintron/src/header.php
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mintron Dashboard</title>
+<link rel="stylesheet" href="src/style.css">-------
+-------
+/var/www/mintron/src/scripts/global.js
+// Funktion, um zwischen verschiedenen Ansichten umzuschalten
+function showView(view) {
+    document.querySelectorAll('.view').forEach(el => el.style.display = 'none');
+    document.getElementById(view).style.display = 'block';
+}
+
+// Realistischere Animationen hinzufügen
+document.addEventListener('mousemove', function(e) {
+    const wave = document.createElement('div');
+    wave.className = 'wave';
+    wave.style.left = `${e.pageX}px`;
+    wave.style.top = `${e.pageY}px`;
+    document.body.appendChild(wave);
+    setTimeout(() => wave.remove(), 1000);
+});
+
+document.addEventListener('click', function(e) {
+    const pulse = document.createElement('div');
+    pulse.className = 'pulse';
+    pulse.style.left = `${e.pageX - 25}px`; // Zentriere den Effekt
+    pulse.style.top = `${e.pageY - 25}px`; // Zentriere den Effekt
+    document.body.appendChild(pulse);
+    setTimeout(() => pulse.remove(), 1000);
+});
+-------
+-------
+/var/www/mintron/src/scripts/log-viewer.js
+function viewLog(file) {
+    fetch(`dashboard/log_viewer.php?file=${encodeURIComponent(file)}`)
+        .then(response => response.json())
+        .then(data => {
+            const logContentContainer = document.getElementById('log-content');
+            if (logContentContainer) {
+                logContentContainer.innerHTML = `
+                    <h2>Log Datei: ${file}</h2>
+                    <pre>${data.log_content}</pre>
+                `;
+            }
+        });
+}
+-------
+-------
+/var/www/mintron/src/scripts/dashboard.js
+// Funktion zum Abrufen der Systeminformationen
+function fetchData() {
+    fetch('dashboard/system_info.php')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('time').textContent = data.time;
+            document.getElementById('cpu').textContent = data.cpu;
+            document.getElementById('cpu_temp').textContent = data.cpu_temp;
+            document.getElementById('cpu_model').textContent = data.cpu_model;
+            document.getElementById('ram').textContent = `${data.ram.used} / ${data.ram.total}`;
+            document.getElementById('disk').textContent = (data.disk.free / (1024 * 1024 * 1024)).toFixed(2);
+            document.getElementById('os').textContent = data.os;
+            document.getElementById('processes').textContent = data.processes;
+
+            // Netzwerkschnittstellen laden
+            updateNetworkTable(data.network);
+            // Repositories laden
+            updateReposTable(data.repos);
+            // Docker-Container laden
+            updateDocker(data.docker);
+        });
+}
+
+// Funktion zum Laden der Netzwerkschnittstellen
+function updateNetworkTable(networkData) {
+    const networkTable = document.getElementById('network-table');
+    if (networkTable) {
+        networkTable.innerHTML = networkData.split('\n').map(row => {
+            const [iface, ip] = row.split('|');
+            return `<tr>
+                        <td>${iface}</td>
+                        <td>${ip}</td>
+                    </tr>`;
+        }).join('');
+    }
+}
+
+// Funktion zum Laden der Repositories
+function updateReposTable(reposData) {
+    const reposTable = document.getElementById('repos-table');
+    if (reposTable) {
+        reposTable.innerHTML = reposData.split('\n').map(repo => `
+            <tr>
+                <td>${repo}</td>
+                <td class="actions">
+                    <button onclick="deleteRepo('${repo}')">Löschen</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+}
+
+function updateDocker(dockerData) {
+    const dockerTable = document.getElementById('docker-table');
+    const dockerStatus = document.getElementById('docker-status');
+    const dockerLogs = document.getElementById('docker-logs');
+    
+    // Überprüfe, ob dockerData die containers-Eigenschaft enthält
+    if (dockerStatus) {
+        dockerStatus.innerHTML = dockerData.status === 'running'
+            ? '<span style="color: green;">Docker läuft</span>'
+            : '<span style="color: red;">Docker gestoppt</span>';
+    }
+    
+    if (dockerLogs) {
+        dockerLogs.textContent = dockerData.logs || 'Keine Logs verfügbar';
+    }
+    
+    // Prüfe, ob dockerData.containers existiert und nicht leer ist
+    if (dockerTable) {
+        if (dockerData.containers && dockerData.containers.length > 0) {
+            dockerTable.innerHTML = dockerData.containers.map(container => {
+                const [id, name, status] = container.split('|');
+                return `<tr>
+                            <td>${id}</td>
+                            <td>${name}</td>
+                            <td>${status}</td>
+                            <td class="actions">
+                                <button onclick="startDocker('${id}')">Starten</button>
+                                <button onclick="stopDocker('${id}')">Stoppen</button>
+                                <button onclick="deleteDocker('${id}')">Löschen</button>
+                            </td>
+                        </tr>`;
+            }).join('');
+        } else {
+            // Falls containers leer oder nicht vorhanden sind
+            dockerTable.innerHTML = '<tr><td colspan="4">Keine Docker-Container gefunden.</td></tr>';
+        }
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchData();
+    setInterval(fetchData, 5000); // Daten alle 5 Sekunden aktualisieren
+});
+-------
+-------
+/var/www/mintron/src/scripts/network.js
+function updateNetworkTable(networkData) {
+    const networkTable = document.getElementById('network-table');
+    if (networkTable) {
+        networkTable.innerHTML = networkData.split('\n').map(row => {
+            const [iface, ip] = row.split('|');
+            return `<tr>
+                        <td>${iface}</td>
+                        <td>${ip}</td>
+                    </tr>`;
+        }).join('');
+    }
+}
+-------
+-------
+/var/www/mintron/src/scripts/docker.js
+function startDocker(id) {
+    fetch(`dashboard/docker_control.php?action=start&id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Docker-Container ${id} gestartet!`);
+                fetchData();
+            } else {
+                alert(`Fehler beim Starten des Docker-Containers ${id}: ${data.error}`);
+            }
+        });
+}
+
+function stopDocker(id) {
+    fetch(`dashboard/docker_control.php?action=stop&id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Docker-Container ${id} gestoppt!`);
+                fetchData();
+            } else {
+                alert(`Fehler beim Stoppen des Docker-Containers ${id}: ${data.error}`);
+            }
+        });
+}
+
+function deleteDocker(id) {
+    if (confirm(`Bist du sicher, dass du den Docker-Container ${id} löschen möchtest?`)) {
+        fetch(`dashboard/docker_control.php?action=delete&id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Docker-Container ${id} gelöscht!`);
+                    fetchData();
+                } else {
+                    alert(`Fehler beim Löschen des Docker-Containers ${id}: ${data.error}`);
+                }
+            });
+    }
+}
+
+-------
+-------
+/var/www/mintron/src/nav.php
+<div class="nav">
+    <a onclick="showView('system')">System Info</a>
+    <a onclick="showView('network')">Netzwerkschnittstellen</a>
+    <a onclick="showView('repos')">Repositorys</a>
+    <a onclick="showView('docker')">Docker Dashboard</a>
+    <a onclick="showView('updates')">Updates</a>
+    <a id="inwork" onclick="showView('upconfig')">Konfiguration</a>
+    <a id="inwork" onclick="showView('logs')">Log Dateien</a> <!-- Neuer Link für Log Dateien -->
+</div>-------
+-------
+/var/www/mintron/dashboard/network.php
+<h2>Netzwerkschnittstellen</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Interface</th>
+            <th>IP-Adresse</th>
+        </tr>
+    </thead>
+    <tbody id="network-table">
+        <!-- Dynamischer Inhalt -->
+    </tbody>
+</table>
+-------
+-------
+/var/www/mintron/dashboard/upconfig.php
+<?php
+header('Content-Type: application/json');
+
+// Debugging-Ausgabe
+error_log("upconfig.php wird aufgerufen");
+
+// Apache-Konfigurationsdateien abrufen
+$apache_conf_files = shell_exec('cat /etc/apache2/sites-available/*.conf 2>&1');
+$apache_conf_files = $apache_conf_files ? $apache_conf_files : "Apache-Konfigurationsdateien nicht gefunden";
+
+// Apache-Fehlerprotokoll abrufen
+$apache_error_log = file_get_contents('/var/log/apache2/error.log');
+$apache_error_log = $apache_error_log ? $apache_error_log : "Apache-Fehlerprotokoll nicht gefunden";
+
+// PHP-Fehlerprotokoll abrufen
+$php_error_log = file_get_contents('/var/log/php_errors.log');
+$php_error_log = $php_error_log ? $php_error_log : "PHP-Fehlerprotokoll nicht gefunden";
+
+$data = [
+    'apache_conf_files' => $apache_conf_files,
+    'apache_error_log' => $apache_error_log,
+    'php_error_log' => $php_error_log
+];
+
+echo json_encode($data);
+?>-------
+-------
+/var/www/mintron/dashboard/updates.php
+<?php
+// Arbeitsverzeichnis ändern
+chdir('/var/www');
+
+// Umgebungsvariable setzen
+putenv('GIT_DISCOVERY_ACROSS_FILESYSTEM=1');
+
+// Funktion zum Abrufen der letzten Git-Commits
+function getGitCommits($limit = 10) {
+    $commits = shell_exec("git log -n $limit --pretty=format:'%h|%an|%ar|%s' 2>&1");
+    $commitsArray = explode("\n", trim($commits));
+    return array_map(function($commit) {
+        return explode('|', $commit);
+    }, $commitsArray);
+}
+
+// Funktion zum Abrufen der letzten Änderungen an Dateien
+function getFileChanges($limit = 50) {
+    $changes = shell_exec("git log --name-status --pretty=format:'%h|%an|%ar|%s' 2>&1");
+    $changesArray = explode("\n", trim($changes));
+    $fileChanges = [];
+    $currentCommit = null;
+
+    foreach ($changesArray as $change) {
+        if (preg_match('/^[a-f0-9]{7}/', $change)) {
+            $currentCommit = explode('|', $change);
+        } elseif ($currentCommit) {
+            $fileChanges[] = array_merge($currentCommit, [$change]);
+            if (count($fileChanges) >= $limit) break;
+        }
+    }
+    return $fileChanges;
+}
+
+$commits = getGitCommits();
+$fileChanges = getFileChanges();
+?>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Übersicht</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+    <h1>Update Übersicht</h1>
+
+    <h2>Letzte Git-Commits</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Commit-Hash</th>
+                <th>Autor</th>
+                <th>Datum</th>
+                <th>Nachricht</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($commits as $commit): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($commit[0]); ?></td>
+                    <td><?php echo htmlspecialchars($commit[1]); ?></td>
+                    <td><?php echo htmlspecialchars($commit[2]); ?></td>
+                    <td><?php echo htmlspecialchars($commit[3]); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <h2>Letzte Änderungen an Dateien</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Commit-Hash</th>
+                <th>Autor</th>
+                <th>Datum</th>
+                <th>Nachricht</th>
+                <th>Dateiänderung</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($fileChanges as $change): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($change[0]); ?></td>
+                    <td><?php echo htmlspecialchars($change[1]); ?></td>
+                    <td><?php echo htmlspecialchars($change[2]); ?></td>
+                    <td><?php echo htmlspecialchars($change[3]); ?></td>
+                    <td><?php echo htmlspecialchars($change[4] ?? ''); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</body>
+</html>
+-------
+-------
+/var/www/mintron/dashboard/system_info.php
+<?php
+header('Content-Type: application/json');
+
+// Systemzeit
+$time = date('Y-m-d H:i:s');
+
+// CPU-Auslastung
+$load = sys_getloadavg();
+$cpu = $load[0];
+
+// CPU-Temperatur
+$cpu_temp = shell_exec('sensors | grep "Package id 0:" | awk \'{print $4}\'');
+$cpu_temp = str_replace("+", "", $cpu_temp);
+$cpu_temp = str_replace("°C", "", $cpu_temp);
+
+// CPU-Modell
+$cpu_model = shell_exec('lscpu | grep "Model name:" | awk \'{for (i=3; i<=NF; i++) printf $i " "; print ""}\'');
+
+// RAM-Nutzung
+$free = shell_exec('free -m');
+$free = (string)trim($free);
+$free_arr = explode("\n", $free);
+$mem = explode(" ", $free_arr[1]);
+$mem = array_filter($mem);
+$mem = array_merge($mem);
+$ram_total = $mem[1];
+$ram_used = $mem[2];
+
+// Speicherplatz
+$disk_free = disk_free_space("/");
+$disk_total = disk_total_space("/");
+
+// System OS
+$os = shell_exec('lsb_release -d');
+$os = str_replace("Description:\t", "", $os);
+
+// Prozesse
+$processes = shell_exec('ps aux | wc -l');
+
+// Netzwerkschnittstellen
+$network = shell_exec('ip -o addr show | awk \'{print $2 "|" $4}\'');
+
+// Reposity Listen
+$repos = shell_exec('grep -rh ^deb /etc/apt/sources.list /etc/apt/sources.list.d/');
+
+$docker = shell_exec('docker ps -a --format "{{.ID}}|{{.Names}}|{{.Status}}"');
+if (empty($docker)) {
+    $docker = "Keine Container gefunden.";
+}
+
+
+// Docker-Container in ein Array umwandeln
+$docker_arr = explode("\n", trim($docker));
+$docker_data = [];
+foreach ($docker_arr as $container) {
+    $docker_data[] = explode("|", $container);
+}
+
+// Docker-Daten in das Array einfügen
+$data = [
+    'time' => $time,
+    'cpu' => $cpu,
+    'cpu_temp' => trim($cpu_temp),
+    'cpu_model' => trim($cpu_model),
+    'ram' => [
+        'total' => $ram_total,
+        'used' => $ram_used
+    ],
+    'disk' => [
+        'free' => $disk_free,
+        'total' => $disk_total
+    ],
+    'os' => trim($os),
+    'processes' => trim($processes),
+    'network' => trim($network),
+    'repos' => trim($repos),
+    'docker' => [
+        'status' => 'running',  // Hier könnte auch der Status des Docker-Daemons ermittelt werden
+        'containers' => $docker_data
+    ]
+];
+
+echo json_encode($data);
+-------
+-------
+/var/www/mintron/dashboard/log_viewer.php
+<?php
+header('Content-Type: application/json');
+
+// Alle .log Dateien in /var/log/ auflisten
+$log_files = glob('/var/log/*.log');
+sort($log_files);
+
+// Log-Datei-Inhalt abrufen
+$log_file = isset($_GET['file']) ? $_GET['file'] : null;
+$log_content = '';
+if ($log_file && in_array($log_file, $log_files)) {
+    $log_content = shell_exec("tail -n 50 " . escapeshellarg($log_file));
+}
+
+$data = [
+    'log_files' => $log_files,
+    'log_content' => $log_content
+];
+
+echo json_encode($data);
+?>-------
+-------
+/var/www/mintron/dashboard/docker.php
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Dashboard</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <h2>Docker Dashboard</h2>
+    <div id="docker-status">
+        <!-- Docker-Status wird hier angezeigt -->
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Container ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody id="docker-table">
+            <!-- Dynamischer Inhalt -->
+        </tbody>
+    </table>
+    <button onclick="addDocker()">Hinzufügen</button>
+    <h3>Letzte 25 Docker-Fehlerprotokolle:</h3>
+    <div id="docker-logs">
+        <!-- Docker-Fehlerprotokolle werden hier angezeigt -->
+    </div>
+</body>
+</html>-------
+-------
+/var/www/mintron/dashboard/docker_control.php
+<?php
+header('Content-Type: application/json');
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+$id = isset($_GET['id']) ? escapeshellarg($_GET['id']) : null;
+$name = isset($_GET['name']) ? escapeshellarg($_GET['name']) : null;
+$image = isset($_GET['image']) ? escapeshellarg($_GET['image']) : null;
+
+switch ($action) {
+    case 'start':
+        $output = shell_exec("docker start $id 2>&1");
+        if (strpos($output, 'Error') === false) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $output]);
+        }
+        break;
+    case 'stop':
+        $output = shell_exec("docker stop $id 2>&1");
+        if (strpos($output, 'Error') === false) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $output]);
+        }
+        break;
+    case 'delete':
+        $output = shell_exec("docker rm $id 2>&1");
+        if (strpos($output, 'Error') === false) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $output]);
+        }
+        break;
+    case 'create':
+        $output = shell_exec("docker run -d --name $name $image 2>&1");
+        if (strpos($output, 'Error') === false) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $output]);
+        }
+        break;
+    default:
+        // Docker-Status abrufen
+        $docker_status = shell_exec("systemctl is-active docker");
+        $docker_status = trim($docker_status) === 'active' ? 'running' : 'stopped';
+
+        // Docker-Fehlerprotokolle abrufen
+        $docker_logs = shell_exec("journalctl -u docker.service --since '1 day ago' -p err -n 25");
+
+        // Docker-Container-Informationen abrufen
+        $output = shell_exec("docker ps -a --format '{{.ID}}|{{.Names}}|{{.Status}}'");
+        $containers = explode("\n", trim($output));
+
+        echo json_encode([
+            'docker_status' => $docker_status,
+            'docker_logs' => $docker_logs,
+            'docker' => $containers
+        ]);
+        break;
+}
+?>-------
+-------
+/var/www/mintron/dashboard/logs.php
+<div class="content">
+    <h2>Log Dateien</h2>
+    <div id="log-files">
+        Es werden keine logs angezeigt
+        <!-- Log-Dateien werden hier angezeigt -->
+    </div>
+    <div id="log-content">
+
+        <!-- Log-Inhalt wird hier angezeigt -->
+    </div>
+</div>-------
+-------
+/var/www/mintron/dashboard/repo.php
+<div class="content">
+    <h2>Repositorys</h2>
+    <button onclick="addRepo()">Hinzufügen</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Eintrag</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody id="repos-table">
+            <!-- Dynamischer Inhalt -->
+        </tbody>
+    </table>
+</div>-------
+-------
+/var/www/mintron/index.php
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <?php include 'src/header.php'; ?>
+</head>
+<body>
+    <div class="container">
+        <?php include 'src/nav.php'; ?>
+        <div class="content">
+            <h1 id="title">Mintron Dashboard</h1>
+            <div id="system" class="view">
+                <h2>Systemauslastung</h2>
+                <p>Systemzeit: <span id="time"></span></p>
+                <p>CPU-Auslastung: <span id="cpu"></span>%</p>
+                <p>CPU-Temperatur: <span id="cpu_temp"></span> °C</p>
+                <p>CPU-Modell: <span id="cpu_model"></span></p>
+                <p>RAM-Nutzung: <span id="ram"></span> MB</p>
+                <p>Festplatte: <span id="disk"></span> GB frei</p>
+                <p>System OS: <span id="os"></span></p>
+                <p>Prozesse: <span id="processes"></span></p>
+            </div>
+            <div id="network" class="view" style="display:none;">
+                <?php include 'dashboard/network.php'; ?>
+            </div>
+            <div id="repos" class="view" style="display:none;">
+                <?php include 'dashboard/repo.php'; ?>
+            </div>
+            <div id="docker" class="view" style="display:none;">
+                <?php include 'dashboard/docker.php'; ?>
+            </div>
+            <div id="updates" class="view" style="display:none;">
+                <?php include 'dashboard/updates.php'; ?>
+            </div>
+            <div id="upconfig" class="view" style="display:none;">
+                <?php include 'dashboard/upconfig.php'; ?>
+            </div>
+            <div id="logs" class="view" style="display:none;">
+                <?php include 'dashboard/logs.php'; ?> <!-- Neuer Abschnitt für Log Dateien -->
+            </div>
+        </div>
+    </div>
+    <!-- Einbindung der JavaScript-Dateien -->
+    <script src="/src/scripts/dashboard.js"></script>
+    <script src="/src/scripts/docker.js"></script>
+    <script src="/src/scripts/global.js"></script>
+    <script src="/src/scripts/log-viewer.js"></script>
+    <script src="/src/scripts/network.js"></script>
+
+</body>
+</html>-------
