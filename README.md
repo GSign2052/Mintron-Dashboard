@@ -1,5 +1,6 @@
 <div align="center">
 
+![Mintron Logo](https://github.com/GSign2052/Mintron-Dashboard/blob/main/src/images/android-chrome-512x512.png)
 # 🚀 Mintron Dashboard
 
 [![Linux Mint](https://img.shields.io/badge/Linux%20Mint-21.2-87CF3E?style=for-the-badge&logo=linux-mint&logoColor=white)](https://linuxmint.com/)
