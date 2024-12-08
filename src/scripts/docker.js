@@ -1,41 +1,57 @@
-function startDocker(id) {
-    fetch(`/dashboard/docker_control.php?action=start&id=${id}`)
+/**
+ * Docker-Daten vom Server abrufen und aktualisieren.
+ */
+function fetchDockerData() {
+    fetch('/dashboard/api/docker_control.php')
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                alert(`Docker-Container ${id} gestartet!`);
-                fetchData();
-            } else {
-                alert(`Fehler beim Starten des Docker-Containers ${id}: ${data.error}`);
-            }
-        });
+            updateDockerStatus(data);
+            updateDockerTable(data);
+        })
+        .catch(error => console.error('Fehler beim Abrufen der Docker-Daten:', error));
 }
 
-function stopDocker(id) {
-    fetch(`/dashboard/docker_control.php?action=stop&id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(`Docker-Container ${id} gestoppt!`);
-                fetchData();
-            } else {
-                alert(`Fehler beim Stoppen des Docker-Containers ${id}: ${data.error}`);
-            }
-        });
-}
-
-function deleteDocker(id) {
-    if (confirm(`Bist du sicher, dass du den Docker-Container ${id} löschen möchtest?`)) {
-        fetch(`/dashboard/docker_control.php?action=delete&id=${id}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`Docker-Container ${id} gelöscht!`);
-                    fetchData();
-                } else {
-                    alert(`Fehler beim Löschen des Docker-Containers ${id}: ${data.error}`);
-                }
-            });
+/**
+ * Aktualisiert die Docker-Statusanzeige (grünes oder rotes Lämpchen).
+ * @param {Object} dockerData - Die Docker-Daten vom Server.
+ */
+function updateDockerStatus(dockerData) {
+    const dockerStatusElement = document.getElementById('docker-status-indicator');
+    if (dockerStatusElement) {
+        dockerStatusElement.innerHTML = dockerData.docker_status === 'running'
+            ? '<span style="color: green;  font-weight: bold;">Status Aktiv 🟢</span>'
+            : '<span style="color: red; font-weight: bold;">Status Ausgeschalten 🔴</span>';
     }
 }
 
+/**
+ * Aktualisiert die Docker-Tabelle mit den Container-Daten.
+ * @param {Object} dockerData - Die Docker-Daten vom Server.
+ */
+function updateDockerTable(dockerData) {
+    const dockerTable = document.getElementById('docker-table');
+    if (dockerTable) {
+        if (dockerData.containers && dockerData.containers.length > 0) {
+            dockerTable.innerHTML = dockerData.containers
+                .filter(container => typeof container === 'string' && container.includes('|'))
+                .map(container => {
+                    const [id, name, status] = container.split('|');
+                    return `<tr>
+                        <td>${id}</td>
+                        <td>${name}</td>
+                        <td>${status}</td>
+                        <td>
+                            <button onclick="startDocker('${id}')">Starten</button>
+                            <button onclick="stopDocker('${id}')">Stoppen</button>
+                            <button onclick="deleteDocker('${id}')">Löschen</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+        } else {
+            dockerTable.innerHTML = '<tr><td colspan="4">Keine Docker-Container gefunden.</td></tr>';
+        }
+    }
+}
+
+// Initiales Abrufen der Docker-Daten.
+document.addEventListener('DOMContentLoaded', fetchDockerData);

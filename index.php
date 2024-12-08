@@ -1,50 +1,76 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <?php include 'src/header.php'; ?>
-</head>
-<body>
-    <div class="container">
-        <?php include 'src/nav.php'; ?>
-        <div class="content">
-            <h1 id="title">Mintron Dashboard</h1>
-            <div id="system" class="view">
-                <h2>Systemauslastung</h2>
-                <p>Systemzeit: <span id="time"></span></p>
-                <p>CPU-Auslastung: <span id="cpu"></span>%</p>
-                <p>CPU-Temperatur: <span id="cpu_temp"></span> °C</p>
-                <p>CPU-Modell: <span id="cpu_model"></span></p>
-                <p>RAM-Nutzung: <span id="ram"></span> MB</p>
-                <p>Festplatte: <span id="disk"></span> GB frei</p>
-                <p>System OS: <span id="os"></span></p>
-                <p>Prozesse: <span id="processes"></span></p>
-            </div>
-            <div id="network" class="view" style="display:none;">
-                <?php include 'dashboard/network.php'; ?>
-            </div>
-            <div id="repos" class="view" style="display:none;">
-                <?php include 'dashboard/repo.php'; ?>
-            </div>
-            <div id="docker" class="view" style="display:none;">
-                <?php include 'dashboard/docker.php'; ?>
-            </div>
-            <div id="updates" class="view" style="display:none;">
-                <?php include 'dashboard/updates.php'; ?>
-            </div>
-            <div id="upconfig" class="view" style="display:none;">
-                <?php include 'dashboard/upconfig.php'; ?>
-            </div>
-            <div id="logs" class="view" style="display:none;">
-                <?php include 'dashboard/logs.php'; ?> <!-- Neuer Abschnitt für Log Dateien -->
-            </div>
-        </div>
-    </div>
-    <!-- Einbindung der JavaScript-Dateien -->
+       <!-- Einbindung der JavaScript-Dateien -->
     <script src="/src/scripts/dashboard.js"></script>
     <script src="/src/scripts/docker.js"></script>
     <script src="/src/scripts/global.js"></script>
     <script src="/src/scripts/log-viewer.js"></script>
     <script src="/src/scripts/network.js"></script>
+</head>
+
+<body>
+    <div class="stars"></div>
+    <div class="nebula"></div>
+    <div class="pulse"></div>
+    <div class="container">
+        <?php include 'src/nav.php'; ?>
+        <div class="content">
+            <h1 id="title">Mintron</h1>
+            <div id="system" class="view">
+    <p>Systemzeit: <span id="time"></span></p>
+    <h3>Systemdetails</h3>
+    <p>OS: <span id="os"></span></p>
+    <p>Kernel: <span id="kernel"></span></p>
+    <p>Uptime: <span id="uptime"></span></p>
+
+
+    <h3>CPU</h3>
+    <p>Auslastung: <span id="cpu"></span></p>
+    <pre id="cpu_temp"></pre>
+
+    <h3>RAM</h3>
+    <p>RAM-Nutzung: <span id="ram"></span></p>
+    <div class="progress-bar">
+        <div id="ram-bar" class="progress"></div>
+    </div>
+
+    <h3>Speicherplatz</h3>
+    <table id="disk-table">
+        <thead>
+            <tr>
+                <th>Partition</th>
+                <th>Gesamt</th>
+                <th>Belegt</th>
+                <th>Frei</th>
+                <th>Auslastung</th>
+                <th>Eingehängt</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+            <div id="network" class="view" style="display:none;">
+                <?php include 'dashboard/view/network.php'; ?>
+            </div>
+            <div id="repos" class="view" style="display:none;">
+                <?php include 'dashboard/view/repo.php'; ?>
+            </div>
+            <div id="docker" class="view" style="display:none;">
+                <?php include 'dashboard/view/docker.php'; ?>
+            </div>
+            <div id="updates" class="view" style="display:none;">
+                <?php include 'dashboard/view/updates.php'; ?>
+            </div>
+            <div id="logs" class="view" style="display:none;">
+                <?php include 'dashboard/view/logs.php'; ?> <!-- Neuer Abschnitt für Log Dateien -->
+            </div>
+        </div>
+    </div>
+ 
 
 </body>
+
 </html>

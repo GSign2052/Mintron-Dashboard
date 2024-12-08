@@ -1,39 +1,72 @@
+// Funktion zum Formatieren von CPU-Temperatur- und Lüfterdaten mit Emojis oder Bildern
+function formatCpuTemp(cpuTempData) {
+    return cpuTempData
+        .split('\n')
+        .map(line => {
+            if (line.includes('fan')) {
+                // Emoji für Lüfter oder Bild für Lüfter
+                return `🌀 ${line}`;
+            } else if (line.includes('Tctl')) {
+                // Emoji für Temperatur (🌡️) oder hohe Temperatur (🔥)
+                return `🌡️ ${line}`;
+            } else if (line.includes('Tdie')) {
+                return `🔥 ${line}`;
+            }
+            return line; // Standardzeile
+        })
+        .join('\n'); // Zusammenführen der Zeilen
+}
+
 // Funktion zum Abrufen der Systeminformationen
 function fetchData() {
-    fetch('/dashboard/system_info.php')
+    fetch('/dashboard/api/system_info.php')
         .then(response => response.json())
         .then(data => {
+            // Systemzeit anzeigen
             document.getElementById('time').textContent = data.time;
-            document.getElementById('cpu').textContent = data.cpu;
-            document.getElementById('cpu_temp').textContent = data.cpu_temp;
-            document.getElementById('cpu_model').textContent = data.cpu_model;
-            document.getElementById('ram').textContent = `${data.ram.used} / ${data.ram.total}`;
-            document.getElementById('disk').textContent = (data.disk.free / (1024 * 1024 * 1024)).toFixed(2);
+
+            // CPU-Auslastung
+            const cpuElement = document.getElementById('cpu');
+            cpuElement.textContent = `${data.cpu.toFixed(2)}%`;
+            cpuElement.style.color = data.cpu > 75 ? 'red' : data.cpu > 50 ? 'orange' : 'green';
+
+            // CPU-Temperatur formatieren und aktualisieren
+            const formattedTemp = formatCpuTemp(data.cpu_temp);
+            document.getElementById('cpu_temp').textContent = formattedTemp;
+
+            // RAM-Anzeige aktualisieren
+            const ramUsed = data.ram.used;
+            const ramTotal = data.ram.total;
+            const ramElement = document.getElementById('ram');
+            ramElement.textContent = `${ramUsed} / ${ramTotal} MB`;
+            document.getElementById('ram-bar').style.width = `${(ramUsed / ramTotal) * 100}%`;
+
+            // Speicherplatz anzeigen
+            const diskTable = document.getElementById('disk-table');
+            diskTable.innerHTML = data.disk.map(disk => `
+                <tr>
+                    <td>${disk.device}</td>
+                    <td>${disk.size}</td>
+                    <td>${disk.used}</td>
+                    <td>${disk.available}</td>
+                    <td>${disk.usage}</td>
+                    <td>${disk.mount}</td>
+                </tr>
+            `).join('');
+
+            // Weitere Systemdetails
             document.getElementById('os').textContent = data.os;
-            document.getElementById('processes').textContent = data.processes;
+            document.getElementById('kernel').textContent = data.kernel;
+            document.getElementById('uptime').textContent = data.uptime;
 
             // Netzwerkschnittstellen laden
             updateNetworkTable(data.network);
             // Repositories laden
             updateReposTable(data.repos);
-            // Docker-Container laden
-            updateDocker(data.docker);
         });
 }
 
-// Funktion zum Laden der Netzwerkschnittstellen
-function updateNetworkTable(networkData) {
-    const networkTable = document.getElementById('network-table');
-    if (networkTable) {
-        networkTable.innerHTML = networkData.split('\n').map(row => {
-            const [iface, ip] = row.split('|');
-            return `<tr>
-                        <td>${iface}</td>
-                        <td>${ip}</td>
-                    </tr>`;
-        }).join('');
-    }
-}
+
 
 // Funktion zum Laden der Repositories
 function updateReposTable(reposData) {
@@ -50,47 +83,17 @@ function updateReposTable(reposData) {
     }
 }
 
-function updateDocker(dockerData) {
-    const dockerTable = document.getElementById('docker-table');
-    const dockerStatus = document.getElementById('docker-status');
-    const dockerLogs = document.getElementById('docker-logs');
-    
-    // Überprüfe, ob dockerData die containers-Eigenschaft enthält
-    if (dockerStatus) {
-        dockerStatus.innerHTML = dockerData.status === 'running'
-            ? '<span style="color: green;">Docker läuft</span>'
-            : '<span style="color: red;">Docker gestoppt</span>';
-    }
-    
-    if (dockerLogs) {
-        dockerLogs.textContent = dockerData.logs || 'Keine Logs verfügbar';
-    }
-    
-    // Prüfe, ob dockerData.containers existiert und nicht leer ist
-    if (dockerTable) {
-        if (dockerData.containers && dockerData.containers.length > 0) {
-            dockerTable.innerHTML = dockerData.containers.map(container => {
-                const [id, name, status] = container.split('|');
-                return `<tr>
-                            <td>${id}</td>
-                            <td>${name}</td>
-                            <td>${status}</td>
-                            <td class="actions">
-                                <button onclick="startDocker('${id}')">Starten</button>
-                                <button onclick="stopDocker('${id}')">Stoppen</button>
-                                <button onclick="deleteDocker('${id}')">Löschen</button>
-                            </td>
-                        </tr>`;
-            }).join('');
-        } else {
-            // Falls containers leer oder nicht vorhanden sind
-            dockerTable.innerHTML = '<tr><td colspan="4">Keine Docker-Container gefunden.</td></tr>';
-        }
-    }
-}
-
-
+// Initiales Abrufen der Systemdaten
 document.addEventListener('DOMContentLoaded', function() {
     fetchData();
     setInterval(fetchData, 5000); // Daten alle 5 Sekunden aktualisieren
 });
+
+function showView(view) {
+    document.querySelectorAll('.view').forEach(el => el.style.display = 'none');
+
+    const target = document.getElementById(view);
+    if (target) target.style.display = 'block';
+    else console.error(`Ansicht "${view}" nicht gefunden.`);
+}
+

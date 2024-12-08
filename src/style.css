@@ -1,165 +1,259 @@
-body {
-    background-color: #000;
-    color: #00FF00;
-    font-family: 'Courier New', Courier, monospace;
-    overflow: auto; /* Ermöglicht das Scrollen */
-    position: relative;
+/* Grundlegende Variablen */
+:root {
+    --bg-color: #09090b;
+    --fg-color: #e3e3e3;
+    --accent-color: #00ffcc;
+    --surface-1: #101012;
+    --surface-2: #27272a;
+    --surface-3: #52525b;
+  }
+  .progress-bar {
+    width: 50%;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 10px 0;
 }
 
-.container {
+.progress {
+    height: 100%;
+    background-color: green;
+    width: 0; /* Initialzustand */
+    transition: width 0.5s;
+}
+
+  /* Grundlegende Körperstile */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 100%;
+    line-height: 1.6;
+    color: var(--accent-color);
+    background: url('/src/images/background.png') no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  /* Layout */
+  .container {
     display: flex;
-    flex-wrap: nowrap; /* Ändere flex-wrap auf nowrap */
-}
-
-.nav {
-    width: 200px;
-    padding: 20px;
-    border-right: 1px solid #00FF00;
-}
-
-.content {
-    flex-grow: 1;
-    padding: 20px;
-}
-
-#inwork {
-    color: yellow;
-}
-
-.nav a {
-    color: #00FF00;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.nav a:hover {
-    text-decoration: underline;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-table, th, td {
-    border: 1px solid #00FF00;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: #111;
-}
-
-.actions {
+    min-height: 100vh;
+  }
+  
+  .nav {
+    width: 10%;
+    padding: 2%;
+    background: rgba(0, 31, 46, 0.9);
+    border-right: 1px solid var(--accent-color);
+  }
+  
+  .content {
+    flex: 1;
+    padding: 2%;
     display: flex;
-    gap: 10px;
-}
-
+    flex-direction: column;
+  }
+  
+  /* Separater Button-Stil */
 button {
-    background-color: #00FF00;
-    color: #000;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
+    display: inline-block; /* Kompakte Darstellung */
+    padding: 10px 15px; /* Angemessene Polsterung */
+    margin: 10px 0; /* Abstand zu anderen Elementen */
+    background: linear-gradient(135deg, var(--surface-1), var(--surface-2)); /* Farbverlauf */
+    border: 2px solid var(--accent-color); /* Rahmen mit Akzentfarbe */
+    color: var(--accent-color); /* Textfarbe */
+    font-size: 1em; /* Einheitliche Schriftgröße */
+    font-family: 'Poppins', sans-serif; /* Einheitliche Schriftart */
+    text-transform: uppercase; /* Großbuchstaben */
+    text-align: center; /* Text zentrieren */
+    text-decoration: none; /* Entferne Unterstreichung */
+    border-radius: 5px; /* Abgerundete Ecken */
+    cursor: pointer; /* Zeigerhand bei Hover */
+    transition: all 0.3s ease; /* Weiche Übergänge */
+    box-shadow: 0 0 5px rgba(0, 255, 204, 0.5); /* Leichter Glüheffekt */
 }
 
+/* Hover-Effekt für den separaten Button */
 button:hover {
-    background-color: #333;
-    color: #00FF00;
+    background: linear-gradient(135deg, var(--surface-2), var(--surface-3)); /* Umgekehrter Farbverlauf */
+    box-shadow: 0 0 15px var(--accent-color); /* Glüheffekt */
+    transform: scale(1.1); /* Leichtes Vergrößern */
 }
 
-/* Animation für den Gravitationseffekt in Schwerelosigkeit */
-@keyframes floatEffect {
-    0% {
-        transform: translateY(0) translateX(0) scale(0.5);
-        opacity: 1;
-    }
-    50% {
-        transform: translateY(-30px) translateX(10px) scale(0.7); /* Bewegung nach oben und leicht seitlich */
-        opacity: 0.5;
-    }
-    100% {
-        transform: translateY(100px) translateX(-10px) scale(0.9); /* Am Ende verschwinden sie am Rand */
-        opacity: 0;
-    }
-}
-
-/* Sternenstaub-Effekt mit chinesischen Symbolen */
-.starDustWave {
+  /* Navigation und Buttons */
+  .nav a {
+    display: block;
+    width: 100%;
+    padding: 3% 5%;
+    margin-bottom: 2%;
+    background: linear-gradient(135deg, #001f2e, #00414f);
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .nav a:hover {
+    box-shadow: 0 0 20px #0077ff;
+    transform: scale(1.05);
+  }
+  
+  /* Tabellen */
+  table {
+    width: 100%;
+    margin: 1% 0;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 10px var(--accent-color);
+  }
+  
+  table, th, td {
+    border: 1px solid var(--accent-color);
+  }
+  
+  th, td {
+    padding: 1%;
+    text-align: left;
+  }
+  
+  th {
+    background-color: rgba(0, 255, 204, 0.2);
+  }
+  
+  /* Überschriften */
+  h1, h2, h3 {
+    width: 100%;
+    margin: 1% 0;
+    text-align: left;
+    color: var(--accent-color);
+  }
+  
+  h1 { font-size: 2.5em; }
+  h2 { font-size: 2em; }
+  h3 { font-size: 1.5em; }
+  
+  /* Zusätzliche Stile */
+  #log-files {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #log-files li {
+    margin-bottom: 2%;
+  }
+  
+  #log-files button {
+    background: #004080;
+    color: white;
+    border: none;
+    border-radius: 3px;
+  }
+  
+  #log-content {
+    margin-top: 2%;
+    padding: 2%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  
+  #inwork { color: yellow; }
+  
+  .actions {
+    display: flex;
+    gap: 2%;
+  }
+  
+  /* Animationen */
+  @keyframes floatEffect {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5%) scale(1.1); }
+  }
+  
+  .planet, .starDustWave {
     position: absolute;
-    top: 150%;
-    left: 150%;
-    font-size: 12px;  /* Kleinere Symbole */
-    color: rgba(0, 255, 0, 0.7);  /* Grüner Farbton mit Transparenz */
-    opacity: 122.8;  /* Transparenz der Symbole */
-    animation: floatEffect 5s ease-out infinite;
+    animation: floatEffect 10s linear infinite;
+    opacity: 0.8;
     pointer-events: none;
-    transform-origin: center;
-    white-space: nowrap;
-    text-align: center;
-    font-family: "Arial", sans-serif;
-    will-change: transform, opacity; /* Optimierung für die Animation */
-}
-
-/* Variationen für unterschiedliche Partikelgeschwindigkeiten */
-.starDustWave:nth-child(even) {
-    animation-duration: 5s;
-    animation-delay: 1s;
-}
-
-.starDustWave:nth-child(odd) {
-    animation-duration: 6s;
-    animation-delay: 2s;
-}
-
-
-
-@keyframes ripple {
-    0% {
-        transform: scale(0);
-        opacity: 1;
+  }
+  
+  .planet {
+    font-size: 1.5em;
+    z-index: -2;
+  }
+  
+  .starDustWave {
+    font-size: 0.75em;
+    color: rgba(0, 255, 204, 0.7);
+  }
+  
+  /* Hinzugefügte und wiederhergestellte Stile */
+  .planet:nth-child(1) { top: 10%; left: 10%; }
+  .planet:nth-child(2) { top: 40%; right: 20%; }
+  .planet:nth-child(3) { bottom: 30%; left: 30%; }
+  
+  .starDustWave:nth-child(1) { top: 20%; right: 30%; }
+  .starDustWave:nth-child(2) { bottom: 40%; left: 20%; }
+  .starDustWave:nth-child(3) { top: 50%; right: 10%; }
+  
+  #startButton, #stopButton {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-right: 10px;
+  }
+  
+  #output {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid var(--accent-color);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
     }
-    100% {
-        transform: scale(4);
-        opacity: 0;
+  
+    .nav {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--accent-color);
     }
-}
-
-
-
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(0, 255, 0, 0.5);
-    pointer-events: none;
-    animation: ripple 1s linear;
-}
-
-/* Pulse-Effekt */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
+  
+    .content {
+      padding: 5%;
     }
-    100% {
-        transform: scale(2);
-        opacity: 0;
+  
+    .planet, .starDustWave {
+      display: none; /* Verstecke dekorative Elemente auf kleinen Bildschirmen */
     }
-}
-
-.pulse {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(0, 255, 0, 0.5);
-    pointer-events: none;
-    animation: pulse 1s linear;
-}
+  }
+  
+  /* Zusätzliche spezifische Stile */
+  .material-icons {
+    font-size: 24px;
+    vertical-align: middle;
+  }
+  
+  .log-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .terminal {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #00ff00;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  /* Füge hier weitere spezifische Stile hinzu, die in der ursprünglichen Datei vorhanden waren */
